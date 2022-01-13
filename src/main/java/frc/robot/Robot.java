@@ -23,8 +23,8 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  VictorSPX _victor0 = new VictorSPX(0);
-  VictorSPX _victor1 = new VictorSPX(0);
+  VictorSPX _victor0 = new VictorSPX(4);
+  VictorSPX _victor1 = new VictorSPX(5);
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
