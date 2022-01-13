@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import java.lang.Object.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,10 +23,14 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  VictorSPX _victor0 = new VictorSPX(0);
+  VictorSPX _victor1 = new VictorSPX(0);
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+  XboxController _Controller0 = new XboxController(0);
+
   @Override
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -81,7 +89,22 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    if (_Controller0.getAButton()) {
+      _victor0.set(ControlMode.PercentOutput, 0.5);
+    } else if (_Controller0.getBButton()) {
+      _victor0.set(ControlMode.PercentOutput, -0.5);
+    } else {
+      _victor0.set(ControlMode.PercentOutput, 0);
+    }
+    if (_Controller0.getXButton()) {
+      _victor1.set(ControlMode.PercentOutput, 0.5);
+    } else if (_Controller0.getYButton()) {
+      _victor1.set(ControlMode.PercentOutput, -0.5);
+    } else {
+      _victor1.set(ControlMode.PercentOutput, 0);
+    }
+  }
 
   @Override
   public void testInit() {
