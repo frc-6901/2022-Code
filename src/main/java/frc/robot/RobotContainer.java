@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-//import org.graalvm.compiler.hotspot.sparc.SPARCHotSpotRegisterAllocationConfig;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -13,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -24,9 +24,10 @@ import frc.robot.subsystems.Shooter;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private final ExampleSubsystem m_subsystem = new ExampleSubsystem(); // you said not to mess with this
   private final Shooter m_shooter = new Shooter();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_shooter);
+  private final ExampleCommand m_autoCommand = new ExampleCommand(m_subsystem); // you said not to mess with this
 
   private final XboxController m_navigatorController =
       new XboxController(ControllerConstants.kNavigatorPort);
@@ -35,11 +36,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    Command defaultCommand = new InstantCommand(
+    m_shooter.setDefaultCommand(
+      new InstantCommand(
       () -> {
         m_shooter.setRPM(0);
-        }, m_shooter);
-    m_shooter.setDefaultCommand(defaultCommand);
+        }, m_shooter));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -55,7 +56,7 @@ public class RobotContainer {
     new JoystickButton(m_navigatorController, Button.kX.value)
         .whenPressed(
             () -> {
-              m_shooter.setRPM(Constants.kShooterRPM);
+              m_shooter.setRPM(ShooterConstants.kShooterTestRPM);
             }, m_shooter);
   }
 

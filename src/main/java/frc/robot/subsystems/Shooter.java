@@ -12,36 +12,30 @@ import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
   // Spark Max Motor Controller Object
-  CANSparkMax m_motorLeader = new CANSparkMax(Constants.kLeftShooterMotorPort, MotorType.kBrushless);
-  CANSparkMax m_motorFollower = new CANSparkMax(Constants.kRightShooterMotorPort, MotorType.kBrushless);
+  CANSparkMax m_motorLeader = new CANSparkMax(ShooterConstants.kLeftShooterMotorPort, MotorType.kBrushless);
+  CANSparkMax m_motorFollower = new CANSparkMax(ShooterConstants.kRightShooterMotorPort, MotorType.kBrushless);
   
   // Spark Max PID Controller Object
   private SparkMaxPIDController m_shooterController = m_motorLeader.getPIDController();
 
-  // Some off brand object
+  // Feed Forward Calculator
   private SimpleMotorFeedforward m_flywheelFeedforward =
-      new SimpleMotorFeedforward(Constants.kS, Constants.kV, Constants.kA);
+      new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV, ShooterConstants.kA);
   
-  /** Creates a new ExampleSubsystem. */
+  /** Creates a new Shooter */
   public Shooter() {
     m_motorFollower.follow(m_motorLeader, true);
-    m_shooterController.setP(Constants.kP);
+    m_shooterController.setP(ShooterConstants.kP);
   }
 
   // Sets the RPM to the specified parameter
   public void setRPM(int RPM) {
-    if (RPM != 0) {
-      double feedForward = m_flywheelFeedforward.calculate(RPM / 60);
-      m_shooterController.setReference(RPM, ControlType.kVelocity, 0, feedForward, ArbFFUnits.kVoltage);
-    }
-    else {
-      m_motorLeader.set(0.0);
-    }
-    
+    double feedForward = m_flywheelFeedforward.calculate(RPM / 60);
+    m_shooterController.setReference(RPM, ControlType.kVelocity, 0, feedForward, ArbFFUnits.kVoltage);
   }
 
   @Override
