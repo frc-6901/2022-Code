@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -38,13 +37,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    m_shooter.setDefaultCommand(
-        new InstantCommand(
-            () -> {
-              m_shooter.setRPM(0);
-            },
-            m_shooter));
-
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -60,6 +52,11 @@ public class RobotContainer {
         .whenPressed(
             () -> {
               m_shooter.setRPM(ShooterConstants.kShooterTestRPM);
+            },
+            m_shooter)
+        .whenReleased(
+            () -> {
+              m_shooter.setRPM(0);
             },
             m_shooter);
   }

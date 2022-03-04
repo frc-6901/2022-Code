@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
@@ -29,6 +30,7 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter */
   public Shooter() {
+    m_motorLeader.setInverted(true);
     m_motorFollower.follow(m_motorLeader, true);
     m_shooterController.setP(ShooterConstants.kP);
   }
@@ -42,7 +44,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Shooter RPM", m_motorLeader.getEncoder().getVelocity());
   }
 
   @Override
