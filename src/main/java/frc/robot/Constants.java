@@ -18,11 +18,12 @@ public final class Constants {
     public static final int kRightShooterMotorPort = 2;
     public static final int kShooterTestRPM = 500;
     public static final double kPower = 0.6;
-    public static final double kS = 0.14276;
-    public static final double kV = 0.12666;
-    public static final double kA = 0.0038087;
+    public static final double kS = 0.23638;
+    public static final double kV = 0.1292;
+    public static final double kA = 0.0094019;
     public static final double kP = 0.0001;
   }
+
   public static final class ControllerConstants {
     public static final int kNavigatorPort = 0;
     public static final int kOperatorPort = 1;

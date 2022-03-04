@@ -24,10 +24,12 @@ import frc.robot.subsystems.Shooter;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_subsystem = new ExampleSubsystem(); // you said not to mess with this
+  private final ExampleSubsystem m_subsystem =
+      new ExampleSubsystem(); // you said not to mess with this
   private final Shooter m_shooter = new Shooter();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_subsystem); // you said not to mess with this
+  private final ExampleCommand m_autoCommand =
+      new ExampleCommand(m_subsystem); // you said not to mess with this
 
   private final XboxController m_navigatorController =
       new XboxController(ControllerConstants.kNavigatorPort);
@@ -37,10 +39,11 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_shooter.setDefaultCommand(
-      new InstantCommand(
-      () -> {
-        m_shooter.setRPM(0);
-        }, m_shooter));
+        new InstantCommand(
+            () -> {
+              m_shooter.setRPM(0);
+            },
+            m_shooter));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -57,7 +60,8 @@ public class RobotContainer {
         .whenPressed(
             () -> {
               m_shooter.setRPM(ShooterConstants.kShooterTestRPM);
-            }, m_shooter);
+            },
+            m_shooter);
   }
 
   /**
