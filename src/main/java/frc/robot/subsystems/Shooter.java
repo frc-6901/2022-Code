@@ -16,9 +16,9 @@ import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
   // Spark Max Motor Controller Object
-  CANSparkMax m_motorLeader =
+  private CANSparkMax m_motorLeader =
       new CANSparkMax(ShooterConstants.kLeftShooterMotorPort, MotorType.kBrushless);
-  CANSparkMax m_motorFollower =
+  private CANSparkMax m_motorFollower =
       new CANSparkMax(ShooterConstants.kRightShooterMotorPort, MotorType.kBrushless);
 
   // Spark Max PID Controller Object
@@ -40,6 +40,11 @@ public class Shooter extends SubsystemBase {
     double feedForward = m_flywheelFeedforward.calculate(RPM / 60);
     m_shooterController.setReference(
         RPM, ControlType.kVelocity, 0, feedForward, ArbFFUnits.kVoltage);
+  }
+
+  public boolean matchingRPM() {
+    double actualRPM = m_motorLeader.getEncoder().getVelocity();
+    return Math.abs(actualRPM - ShooterConstants.kTargetRPM) <= ShooterConstants.kRPMThreshold;
   }
 
   @Override
