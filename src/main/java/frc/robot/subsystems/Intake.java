@@ -13,9 +13,6 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
-// import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
-// import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
-
 public class Intake extends SubsystemBase {
 
   private final DoubleSolenoid m_intakeSolenoid =
@@ -24,7 +21,7 @@ public class Intake extends SubsystemBase {
           IntakeConstants.kLeftForward,
           IntakeConstants.kRightForward);
       
-  WPI_VictorSPX m_motor = new WPI_VictorSPX(IntakeConstants.kIntakeMotorPort);
+  WPI_VictorSPX m_intakeMotor = new WPI_VictorSPX(IntakeConstants.kIntakeMotorPort);
 
   /** Creates a new Intake. */
   public Intake() {}
@@ -38,21 +35,21 @@ public class Intake extends SubsystemBase {
   }
 
   public void noBalls() {
-    m_motor.setVoltage(0);
+    m_intakeMotor.setVoltage(0);
   }
 
   public void intakeBalls() {
     if (m_intakeSolenoid.get() != kForward) {
       extendIntake();
     }
-    m_motor.setVoltage(-IntakeConstants.kIntakeVoltage);
+    m_intakeMotor.setVoltage(-IntakeConstants.kIntakeVoltage);
   }
 
   public void outtakeBalls() {
     if (m_intakeSolenoid.get() != kForward) {
       extendIntake();
     }
-    m_motor.setVoltage(IntakeConstants.kIntakeVoltage);
+    m_intakeMotor.setVoltage(IntakeConstants.kIntakeVoltage);
   }
 
   @Override
