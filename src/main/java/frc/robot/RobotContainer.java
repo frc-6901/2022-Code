@@ -8,10 +8,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Indexer.IndexerState;
@@ -36,6 +38,8 @@ public class RobotContainer {
 
   private final Indexer m_indexer = new Indexer();
 
+  private final Drivetrain m_drivetrain = new Drivetrain();
+
   private final XboxController m_navigatorController =
       new XboxController(ControllerConstants.kNavigatorPort);
   private final XboxController m_operatorController =
@@ -43,6 +47,13 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    m_drivetrain.setDefaultCommand(
+        new RunCommand(
+            () -> {
+              m_drivetrain.drive(
+                  -m_navigatorController.getLeftY(), m_navigatorController.getRightX());
+            },
+            m_drivetrain));
     // Configure the button bindings
     configureButtonBindings();
   }

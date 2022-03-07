@@ -45,4 +45,11 @@ public final class Constants {
 
     public static final double kIndexerPower = -3;
   }
+
+  public static final class DrivetrainConstants {
+    public static final int kLeftSRXDrivePort = 1;
+    public static final int kLeftSPXDrivePort = 2;
+    public static final int kRightSRXDrivePort = 3;
+    public static final int kRightSPXDrivePort = 4;
+  }
 }
