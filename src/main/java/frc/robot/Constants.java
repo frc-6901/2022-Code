@@ -17,8 +17,6 @@ public final class Constants {
     public static final int kLeftShooterMotorPort = 1;
     public static final int kRightShooterMotorPort = 2;
     public static final int kShooterTestRPM = 500;
-    public static final int kTargetRPM = 2800;
-    public static final int kRPMThreshold = 50;
     public static final double kPower = 0.6;
     public static final double kS = 0.23638;
     public static final double kV = 0.1292;
@@ -32,11 +30,11 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int kLeaderForward = 1;
-    public static final int kLeaderReverse = 2;
-    public static final int kFollowerForward = 3;
-    public static final int kFollowerReverse = 4;
+    public static final int kLeftForward = 0;
+    public static final int kLeftReverse = 1;
+    public static final int kRightForward = 2;
+    public static final int kRightReverse = 3;
     public static final int kIntakeMotorPort = 10;
-    public static final int kIntakeVoltage = 10;
+    public static final int kIntakeVoltage = 5;
   }
 }

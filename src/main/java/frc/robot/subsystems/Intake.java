@@ -18,31 +18,23 @@ import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
 
-  private final DoubleSolenoid m_solenoidLeader =
+  private final DoubleSolenoid m_intakeSolenoid =
       new DoubleSolenoid(
           PneumaticsModuleType.CTREPCM,
-          IntakeConstants.kLeaderForward,
-          IntakeConstants.kLeaderReverse);
-
-  private final DoubleSolenoid m_solenoidFollower =
-      new DoubleSolenoid(
-          PneumaticsModuleType.CTREPCM,
-          IntakeConstants.kFollowerForward,
-          IntakeConstants.kFollowerReverse);
-
+          IntakeConstants.kLeftForward,
+          IntakeConstants.kRightForward);
+      
   WPI_VictorSPX m_motor = new WPI_VictorSPX(IntakeConstants.kIntakeMotorPort);
 
   /** Creates a new Intake. */
   public Intake() {}
 
   public void extendIntake() {
-    m_solenoidLeader.set(kForward);
-    m_solenoidFollower.set(kForward);
+    m_intakeSolenoid.set(kForward);
   }
 
   public void retractIntake() {
-    m_solenoidLeader.set(kReverse);
-    m_solenoidFollower.set(kReverse);
+    m_intakeSolenoid.set(kReverse);
   }
 
   public void noBalls() {
@@ -50,14 +42,14 @@ public class Intake extends SubsystemBase {
   }
 
   public void intakeBalls() {
-    if (m_solenoidFollower.get() != kForward) {
+    if (m_intakeSolenoid.get() != kForward) {
       extendIntake();
     }
     m_motor.setVoltage(-IntakeConstants.kIntakeVoltage);
   }
 
   public void outtakeBalls() {
-    if (m_solenoidFollower.get() != kForward) {
+    if (m_intakeSolenoid.get() != kForward) {
       extendIntake();
     }
     m_motor.setVoltage(IntakeConstants.kIntakeVoltage);
