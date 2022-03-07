@@ -69,7 +69,7 @@ public class RobotContainer {
             },
             m_shooter);
 
-    new JoystickButton(m_operatorController, Button.kRightBumper.value)
+    new JoystickButton(m_navigatorController, Button.kRightBumper.value)
         .whenPressed(
             () -> {
               m_intake.retractIntake();
@@ -81,14 +81,22 @@ public class RobotContainer {
             () -> {
               m_intake.intakeBalls();
             },
-            m_shooter);
+            m_shooter)
+        .whenReleased(
+            () -> {
+              m_intake.noBalls();
+            });
 
     new JoystickButton(m_operatorController, Button.kY.value)
         .whenPressed(
             () -> {
               m_intake.outtakeBalls();
             },
-            m_shooter);
+            m_shooter)
+        .whenReleased(
+            () -> {
+              m_intake.noBalls();
+            });
   }
 
   /**

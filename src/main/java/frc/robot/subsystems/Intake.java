@@ -45,18 +45,22 @@ public class Intake extends SubsystemBase {
     m_solenoidFollower.set(kReverse);
   }
 
+  public void noBalls() {
+    m_motor.setVoltage(0);
+  }
+
   public void intakeBalls() {
     if (m_solenoidFollower.get() != kForward) {
       extendIntake();
     }
-    m_motor.setVoltage(IntakeConstants.kIntakeVoltage);
+    m_motor.setVoltage(-IntakeConstants.kIntakeVoltage);
   }
 
   public void outtakeBalls() {
     if (m_solenoidFollower.get() != kForward) {
       extendIntake();
     }
-    m_motor.setVoltage(-IntakeConstants.kIntakeVoltage);
+    m_motor.setVoltage(IntakeConstants.kIntakeVoltage);
   }
 
   @Override
