@@ -13,6 +13,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -26,6 +27,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_subsystem =
       new ExampleSubsystem(); // you said not to mess with this
   private final Shooter m_shooter = new Shooter();
+  private final Intake m_intake = new Intake();
 
   private final ExampleCommand m_autoCommand =
       new ExampleCommand(m_subsystem); // you said not to mess with this
@@ -57,6 +59,34 @@ public class RobotContainer {
         .whenReleased(
             () -> {
               m_shooter.setRPM(0);
+            },
+            m_shooter);
+
+    new JoystickButton(m_navigatorController, Button.kLeftBumper.value)
+        .whenPressed(
+            () -> {
+              m_intake.extendIntake();
+            },
+            m_shooter);
+
+    new JoystickButton(m_operatorController, Button.kRightBumper.value)
+        .whenPressed(
+            () -> {
+              m_intake.retractIntake();
+            },
+            m_shooter);
+
+    new JoystickButton(m_operatorController, Button.kA.value)
+        .whenPressed(
+            () -> {
+              m_intake.intakeBalls();
+            },
+            m_shooter);
+
+    new JoystickButton(m_operatorController, Button.kY.value)
+        .whenPressed(
+            () -> {
+              m_intake.outtakeBalls();
             },
             m_shooter);
   }
