@@ -16,13 +16,13 @@ import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
   // Spark Max Motor Controller Object
-  private CANSparkMax m_motorLeader =
+  private CANSparkMax m_shooterMotorLeader =
       new CANSparkMax(ShooterConstants.kLeftShooterMotorPort, MotorType.kBrushless);
-  private CANSparkMax m_motorFollower =
+  private CANSparkMax m_shooterMotorFollower =
       new CANSparkMax(ShooterConstants.kRightShooterMotorPort, MotorType.kBrushless);
 
   // Spark Max PID Controller Object
-  private SparkMaxPIDController m_shooterController = m_motorLeader.getPIDController();
+  private SparkMaxPIDController m_shooterController = m_shooterMotorLeader.getPIDController();
 
   // Feed Forward Calculator
   private SimpleMotorFeedforward m_flywheelFeedforward =
@@ -30,8 +30,8 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter */
   public Shooter() {
-    m_motorLeader.setInverted(true);
-    m_motorFollower.follow(m_motorLeader, true);
+    m_shooterMotorLeader.setInverted(true);
+    m_shooterMotorFollower.follow(m_shooterMotorLeader, true);
     m_shooterController.setP(ShooterConstants.kP);
   }
 
@@ -42,14 +42,14 @@ public class Shooter extends SubsystemBase {
         RPM, ControlType.kVelocity, 0, feedForward, ArbFFUnits.kVoltage);
   }
 
-  public boolean matchingRPM() {
-    double actualRPM = m_motorLeader.getEncoder().getVelocity();
+  public boolean atTargetRPM() {
+    double actualRPM = m_shooterMotorLeader.getEncoder().getVelocity();
     return Math.abs(actualRPM - ShooterConstants.kTargetRPM) <= ShooterConstants.kRPMThreshold;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter RPM", m_motorLeader.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Shooter RPM", m_shooterMotorLeader.getEncoder().getVelocity());
   }
 
   @Override
