@@ -18,8 +18,8 @@ public class Intake extends SubsystemBase {
   private final DoubleSolenoid m_intakeSolenoid =
       new DoubleSolenoid(
           PneumaticsModuleType.CTREPCM,
-          IntakeConstants.kLeftForward,
-          IntakeConstants.kRightForward);
+          IntakeConstants.kIntakeSolenoidPorts[0],
+          IntakeConstants.kIntakeSolenoidPorts[1]);
       
   WPI_VictorSPX m_intakeMotor = new WPI_VictorSPX(IntakeConstants.kIntakeMotorPort);
 

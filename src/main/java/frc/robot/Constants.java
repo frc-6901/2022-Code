@@ -30,10 +30,7 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int kLeftForward = 0;
-    public static final int kLeftReverse = 1;
-    public static final int kRightForward = 2;
-    public static final int kRightReverse = 3;
+    public static final int kIntakeSolenoidPorts[] = {0, 1};
     public static final int kIntakeMotorPort = 10;
     public static final int kIntakeVoltage = 5;
   }
