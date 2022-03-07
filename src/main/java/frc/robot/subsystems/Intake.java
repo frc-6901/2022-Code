@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
           PneumaticsModuleType.CTREPCM,
           IntakeConstants.kIntakeSolenoidPorts[0],
           IntakeConstants.kIntakeSolenoidPorts[1]);
-      
+
   WPI_VictorSPX m_intakeMotor = new WPI_VictorSPX(IntakeConstants.kIntakeMotorPort);
 
   /** Creates a new Intake. */
