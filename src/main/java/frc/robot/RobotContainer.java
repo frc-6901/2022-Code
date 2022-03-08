@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
@@ -49,10 +50,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_navigatorController, Button.kX.value)
+    new JoystickButton(m_operatorController, Button.kX.value)
         .whenPressed(
             () -> {
-              m_shooter.setRPM(2800);
+              m_shooter.setRPM(ShooterConstants.kFenderShotRPM);
             },
             m_shooter)
         .whenReleased(
