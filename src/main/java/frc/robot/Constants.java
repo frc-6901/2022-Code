@@ -14,10 +14,10 @@ package frc.robot;
  */
 public final class Constants {
   public static final class ShooterConstants {
-    public static final int kLeftShooterMotorPort = 1;
-    public static final int kRightShooterMotorPort = 2;
-    public static final int kRPMThreshold = 50;
-    public static final double kPower = 0.6;
+    public static final int kLeaderShooterMotorPort = 1;
+    public static final int kFollowerShooterMotorPort = 2;
+    public static final double kFenderShotRPM = 2000;
+    public static final double kRPMThreshold = 100;
     public static final double kS = 0.23638;
     public static final double kV = 0.1292;
     public static final double kA = 0.0094019;

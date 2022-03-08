@@ -17,9 +17,9 @@ import frc.robot.Constants.ShooterConstants;
 public class Shooter extends SubsystemBase {
   // Spark Max Motor Controller Object
   private CANSparkMax m_shooterMotorLeader =
-      new CANSparkMax(ShooterConstants.kLeftShooterMotorPort, MotorType.kBrushless);
+      new CANSparkMax(ShooterConstants.kLeaderShooterMotorPort, MotorType.kBrushless);
   private CANSparkMax m_shooterMotorFollower =
-      new CANSparkMax(ShooterConstants.kRightShooterMotorPort, MotorType.kBrushless);
+      new CANSparkMax(ShooterConstants.kFollowerShooterMotorPort, MotorType.kBrushless);
 
   // Spark Max PID Controller Object
   private SparkMaxPIDController m_shooterController = m_shooterMotorLeader.getPIDController();
@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase {
       new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV, ShooterConstants.kA);
 
   // Target RPM
-  private double targetRPM = 0;
+  private double m_targetRPM = 0;
   /** Creates a new Shooter */
   public Shooter() {
     m_shooterMotorLeader.setInverted(true);
@@ -39,19 +39,19 @@ public class Shooter extends SubsystemBase {
 
   // Sets the RPM to the specified parameter
   public void setRPM(double RPM) {
-    targetRPM = RPM;
+    m_targetRPM = RPM;
   }
 
   public boolean atTargetRPM() {
     double actualRPM = m_shooterMotorLeader.getEncoder().getVelocity();
-    return Math.abs(actualRPM - targetRPM) <= ShooterConstants.kRPMThreshold;
+    return Math.abs(actualRPM - m_targetRPM) <= ShooterConstants.kRPMThreshold;
   }
 
   @Override
   public void periodic() {
-    double feedForward = m_flywheelFeedforward.calculate(targetRPM / 60);
+    double feedForward = m_flywheelFeedforward.calculate(m_targetRPM / 60);
     m_shooterController.setReference(
-        targetRPM, ControlType.kVelocity, 0, feedForward, ArbFFUnits.kVoltage);
+        m_targetRPM, ControlType.kVelocity, 0, feedForward, ArbFFUnits.kVoltage);
     SmartDashboard.putNumber("Shooter RPM", m_shooterMotorLeader.getEncoder().getVelocity());
   }
 
