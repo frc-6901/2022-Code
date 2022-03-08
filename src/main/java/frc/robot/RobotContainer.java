@@ -38,7 +38,7 @@ public class RobotContainer {
 
   private final Indexer m_indexer = new Indexer();
 
-  private final Drivetrain m_drivetrain = new Drivetrain();
+  private final Drivetrain m_drivetrain = new Drivetrain(m_indexer.getPigeon());
 
   private final XboxController m_navigatorController =
       new XboxController(ControllerConstants.kNavigatorPort);

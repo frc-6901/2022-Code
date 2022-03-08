@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -17,6 +18,8 @@ public class Indexer extends SubsystemBase {
   private WPI_TalonSRX m_ballElevatorMotor = new WPI_TalonSRX(IndexerConstants.kBallElevatorPort);
   private CANSparkMax m_indexerMotor =
       new CANSparkMax(IndexerConstants.kIndexerPort, MotorType.kBrushed);
+
+  private PigeonIMU m_pigeon = new PigeonIMU(m_ballElevatorMotor);
 
   private IndexerState m_indexerState = IndexerState.kPassive;
 
@@ -33,6 +36,15 @@ public class Indexer extends SubsystemBase {
   }
   /** Creates a new Indexer. */
   public Indexer() {}
+
+  /**
+   * Get the pigeon hooked to the indexer Talon SRX
+   *
+   * @return Pigeon object hooked to the Talon SRX
+   */
+  public PigeonIMU getPigeon() {
+    return m_pigeon;
+  }
 
   /**
    * Method to determine if the proximity sensor detected the ball
