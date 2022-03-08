@@ -41,7 +41,6 @@ public class Shooter extends SubsystemBase {
   // Sets the RPM to the specified parameter
   public void setRPM(double RPM) {
     targetRPM = RPM;
-    
   }
 
   public boolean atTargetRPM() {
