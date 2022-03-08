@@ -16,7 +16,7 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int kLeftShooterMotorPort = 1;
     public static final int kRightShooterMotorPort = 2;
-    public static final int kShooterTestRPM = 500;
+    public static final int kRPMThreshold = 50;
     public static final double kPower = 0.6;
     public static final double kS = 0.23638;
     public static final double kV = 0.1292;
