@@ -42,7 +42,7 @@ public class Intake extends SubsystemBase {
     if (m_intakeSolenoid.get() != kForward) {
       extendIntake();
     }
-    m_intakeMotor.setVoltage(-IntakeConstants.kIntakeVoltage);
+    m_intakeMotor.setVoltage(IntakeConstants.kIntakeVoltage);
   }
 
   public void outtakeBalls() {
