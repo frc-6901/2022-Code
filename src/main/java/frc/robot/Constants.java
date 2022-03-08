@@ -16,11 +16,7 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int kLeftShooterMotorPort = 1;
     public static final int kRightShooterMotorPort = 2;
-<<<<<<< Updated upstream
     public static final int kRPMThreshold = 50;
-=======
-    public static final int kRPMThreshold = 500;
->>>>>>> Stashed changes
     public static final double kPower = 0.6;
     public static final double kS = 0.23638;
     public static final double kV = 0.1292;

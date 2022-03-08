@@ -30,11 +30,6 @@ public class Shooter extends SubsystemBase {
 
   // Target RPM
   private double targetRPM = 0;
-<<<<<<< Updated upstream
-
-=======
-  
->>>>>>> Stashed changes
   /** Creates a new Shooter */
   public Shooter() {
     m_shooterMotorLeader.setInverted(true);
@@ -45,14 +40,11 @@ public class Shooter extends SubsystemBase {
   // Sets the RPM to the specified parameter
   public void setRPM(double RPM) {
     targetRPM = RPM;
-<<<<<<< Updated upstream
   }
 
   public boolean atTargetRPM() {
     double actualRPM = m_shooterMotorLeader.getEncoder().getVelocity();
     return Math.abs(actualRPM - targetRPM) <= ShooterConstants.kRPMThreshold;
-=======
->>>>>>> Stashed changes
   }
 
   @Override
@@ -60,11 +52,7 @@ public class Shooter extends SubsystemBase {
     double feedForward = m_flywheelFeedforward.calculate(targetRPM / 60);
     m_shooterController.setReference(
         targetRPM, ControlType.kVelocity, 0, feedForward, ArbFFUnits.kVoltage);
-<<<<<<< Updated upstream
     SmartDashboard.putNumber("Shooter RPM", m_shooterMotorLeader.getEncoder().getVelocity());
-=======
-    SmartDashboard.putNumber("Shooter RPM", m_motorLeader.getEncoder().getVelocity());
->>>>>>> Stashed changes
   }
 
   @Override
