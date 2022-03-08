@@ -28,4 +28,10 @@ public final class Constants {
     public static final int kNavigatorPort = 0;
     public static final int kOperatorPort = 1;
   }
+
+  public static final class IntakeConstants {
+    public static final int kIntakeSolenoidPorts[] = {0, 1};
+    public static final int kIntakeMotorPort = 10;
+    public static final int kIntakeVoltage = 5;
+  }
 }
