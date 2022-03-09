@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -51,7 +52,8 @@ public class RobotContainer {
         new RunCommand(
             () -> {
               m_drivetrain.drive(
-                  -m_navigatorController.getLeftY(), m_navigatorController.getRightX());
+                  -DrivetrainConstants.kDriveForwardMultiplier * m_navigatorController.getLeftY(),
+                  DrivetrainConstants.kDriveTurnMultiplier * m_navigatorController.getRightX());
             },
             m_drivetrain));
     // Configure the button bindings
@@ -65,7 +67,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_navigatorController, Button.kX.value)
+    new JoystickButton(m_operatorController, Button.kX.value)
         .whenPressed(
             () -> {
               m_shooter.setRPM(ShooterConstants.kShooterTestRPM);
@@ -112,7 +114,8 @@ public class RobotContainer {
             () -> {
               m_intake.noBalls();
             });
-    new JoystickButton(m_navigatorController, Button.kB.value)
+
+    new JoystickButton(m_operatorController, Button.kB.value)
         .whenPressed(
             () -> {
               m_indexer.setState(IndexerState.kFeeding);
@@ -123,7 +126,8 @@ public class RobotContainer {
               m_indexer.setState(IndexerState.kPassive);
             },
             m_indexer);
-    new JoystickButton(m_navigatorController, Button.kA.value)
+
+    new JoystickButton(m_operatorController, Button.kA.value)
         .whenPressed(
             () -> {
               m_indexer.setState(IndexerState.kReverse);

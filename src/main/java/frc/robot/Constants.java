@@ -16,7 +16,7 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int kLeftShooterMotorPort = 1;
     public static final int kRightShooterMotorPort = 2;
-    public static final int kShooterTestRPM = 500;
+    public static final int kShooterTestRPM = 1950;
     public static final double kPower = 0.6;
     public static final double kS = 0.23638;
     public static final double kV = 0.1292;
@@ -30,20 +30,19 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int kIntakeSolenoidPorts[] = {0, 1};
+    public static final int kIntakeSolenoidPorts[] = {1, 0};
     public static final int kIntakeMotorPort = 10;
     public static final int kIntakeVoltage = 5;
   }
 
   public static final class IndexerConstants {
-    public static final int kProximitySensorPort = 0;
+    public static final int kProximitySensorPort = 1;
     public static final int kBallElevatorPort = 20;
     public static final int kIndexerPort = 21;
 
-    public static final double kPassivePower = 3;
-    public static final double kFeedingPower = 5;
-
-    public static final double kIndexerPower = -3;
+    public static final double kPassivePower = 3.5;
+    public static final double kFeedingPower = 8;
+    public static final double kIndexerPower = 7;
   }
 
   public static final class DrivetrainConstants {
@@ -51,5 +50,8 @@ public final class Constants {
     public static final int kLeftSPXDrivePort = 2;
     public static final int kRightSRXDrivePort = 3;
     public static final int kRightSPXDrivePort = 4;
+
+    public static final double kDriveForwardMultiplier = 0.8;
+    public static final double kDriveTurnMultiplier = 0.8;
   }
 }
