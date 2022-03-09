@@ -13,6 +13,8 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
@@ -31,6 +33,8 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand =
       new ExampleCommand(m_subsystem); // you said not to mess with this
+
+  private final Indexer m_indexer = new Indexer();
 
   private final XboxController m_navigatorController =
       new XboxController(ControllerConstants.kNavigatorPort);
@@ -97,6 +101,28 @@ public class RobotContainer {
             () -> {
               m_intake.noBalls();
             });
+    new JoystickButton(m_navigatorController, Button.kB.value)
+        .whenPressed(
+            () -> {
+              m_indexer.setState(IndexerState.kFeeding);
+            },
+            m_indexer)
+        .whenReleased(
+            () -> {
+              m_indexer.setState(IndexerState.kPassive);
+            },
+            m_indexer);
+    new JoystickButton(m_navigatorController, Button.kA.value)
+        .whenPressed(
+            () -> {
+              m_indexer.setState(IndexerState.kReverse);
+            },
+            m_indexer)
+        .whenReleased(
+            () -> {
+              m_indexer.setState(IndexerState.kPassive);
+            },
+            m_indexer);
   }
 
   /**

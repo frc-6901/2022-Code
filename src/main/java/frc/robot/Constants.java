@@ -34,4 +34,15 @@ public final class Constants {
     public static final int kIntakeMotorPort = 10;
     public static final int kIntakeVoltage = 5;
   }
+
+  public static final class IndexerConstants {
+    public static final int kProximitySensorPort = 0;
+    public static final int kBallElevatorPort = 20;
+    public static final int kIndexerPort = 21;
+
+    public static final double kPassivePower = 3;
+    public static final double kFeedingPower = 5;
+
+    public static final double kIndexerPower = -3;
+  }
 }
