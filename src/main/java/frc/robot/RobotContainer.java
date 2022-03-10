@@ -4,10 +4,19 @@
 
 package frc.robot;
 
+import java.util.Arrays;
+
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -187,6 +196,26 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    TrajectoryConfig setup = new TrajectoryConfig(2, 2);
+
+    setup.setKinematics(m_drivetrain.getKinematics());
+
+    Trajectory traj = TrajectoryGenerator.generateTrajectory(Arrays.asList(new Pose2d(), new Pose2d(1,0, new Rotation2d())), setup);
+
+    RamseteCommand command = new RamseteCommand( 
+      traj,
+      m_drivetrain::getPose,                          
+      new RamseteController(2.0,0.7),
+      m_drivetrain.gSimpleMotorFeedforward(),
+      m_drivetrain.getKinematics(),
+      m_drivetrain::getWheelSpeeds,
+      m_drivetrain.getLeftPIDController(),
+      m_drivetrain.getRightPIDController(),
+      m_drivetrain::setOutput,
+      m_drivetrain
+    );
+
+    return command.andThen(() -> m_drivetrain.setOutput(0, 0)); //run command and after the command stop the drivetrain
+
   }
 }

@@ -1,0 +1,44 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "Victor SPX[10]": {
+        "header": {
+          "open": true
+        }
+      },
+      "window": {
+        "visible": false
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Drivetrain": "Subsystem",
+      "/LiveWindow/ExampleSubsystem": "Subsystem",
+      "/LiveWindow/Indexer": "Subsystem",
+      "/LiveWindow/Intake": "Subsystem",
+      "/LiveWindow/Shooter": "Subsystem",
+      "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/Talon SRX [20]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Victor SPX [10]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Victor SPX [2]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Victor SPX [4]": "Motor Controller",
+      "/SmartDashboard/Field": "Field2d"
+    },
+    "windows": {
+      "/LiveWindow/Drivetrain": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "SmartDashboard": {
+      "open": true
+    }
+  }
+}
