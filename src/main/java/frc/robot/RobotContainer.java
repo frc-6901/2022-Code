@@ -8,11 +8,16 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
@@ -32,6 +37,10 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand =
       new ExampleCommand(m_subsystem); // you said not to mess with this
 
+  private final Indexer m_indexer = new Indexer();
+
+  private final Drivetrain m_drivetrain = new Drivetrain(m_indexer.getPigeon());
+
   private final XboxController m_navigatorController =
       new XboxController(ControllerConstants.kNavigatorPort);
   private final XboxController m_operatorController =
@@ -39,6 +48,14 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    m_drivetrain.setDefaultCommand(
+        new RunCommand(
+            () -> {
+              m_drivetrain.drive(
+                  -DrivetrainConstants.kDriveForwardMultiplier * m_navigatorController.getLeftY(),
+                  DrivetrainConstants.kDriveTurnMultiplier * m_navigatorController.getRightX());
+            },
+            m_drivetrain));
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -97,6 +114,30 @@ public class RobotContainer {
             () -> {
               m_intake.noBalls();
             });
+
+    new JoystickButton(m_operatorController, Button.kB.value)
+        .whenPressed(
+            () -> {
+              m_indexer.setState(IndexerState.kFeeding);
+            },
+            m_indexer)
+        .whenReleased(
+            () -> {
+              m_indexer.setState(IndexerState.kPassive);
+            },
+            m_indexer);
+
+    new JoystickButton(m_operatorController, Button.kA.value)
+        .whenPressed(
+            () -> {
+              m_indexer.setState(IndexerState.kReverse);
+            },
+            m_indexer)
+        .whenReleased(
+            () -> {
+              m_indexer.setState(IndexerState.kPassive);
+            },
+            m_indexer);
   }
 
   /**
