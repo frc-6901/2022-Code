@@ -4,14 +4,12 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import java.util.function.BiConsumer;
-
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,13 +17,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.*;
-import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -39,30 +32,26 @@ public class Drivetrain extends SubsystemBase {
   private WPI_TalonSRX m_rightSRX = new WPI_TalonSRX(DrivetrainConstants.kRightSRXDrivePort);
   private WPI_VictorSPX m_rightSPX = new WPI_VictorSPX(DrivetrainConstants.kRightSPXDrivePort);
 
-  
-
-
-  private final double ks = 0;
-  private final double kv = 0;
-  private final double ka = 0;
-  private final double kp = 0;
-  private final double ki = 0;
-  private final double kd = 0;
-  private final double wheelDiameter = 6;
-  private final double trackWidth = 21.875;
-  private final double gearRatio = 1;
   private PigeonIMU m_pigeon;
 
-  private DifferentialDriveKinematics diffDrive = new DifferentialDriveKinematics(Units.inchesToMeters(trackWidth));
+  private DifferentialDriveKinematics diffDrive =
+      new DifferentialDriveKinematics(DrivetrainConstants.kTrackwidth);
   private DifferentialDrive m_drive = new DifferentialDrive(m_leftSRX, m_rightSRX);
 
   private Pose2d position;
 
-  private DifferentialDriveOdometry m_Odometry = new DifferentialDriveOdometry(getRotation());
+  private DifferentialDriveOdometry m_Odometry = new DifferentialDriveOdometry(new Rotation2d());
 
+  private PIDController m_leftController =
+      new PIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD);
+  private PIDController m_righController =
+      new PIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD);
+  private SimpleMotorFeedforward m_feedForward =
+      new SimpleMotorFeedforward(
+          DrivetrainConstants.kLinearKS,
+          DrivetrainConstants.kLinearKV,
+          DrivetrainConstants.kLinearKA);
 
-
-  
   /**
    * Drives the robot in an arcade drive
    *
@@ -74,45 +63,46 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(m_leftSRX.getSelectedSensorVelocity() / gearRatio * 2 * Math.PI * Units.inchesToMeters(wheelDiameter/2.0) / 60.0, m_rightSRX.getSelectedSensorVelocity() / gearRatio * 2 * Math.PI * Units.inchesToMeters(wheelDiameter/2.0) / 60.0);
+    return new DifferentialDriveWheelSpeeds(
+        ticksToDistance(m_leftSRX.getSelectedSensorVelocity()) / 0.1,
+        ticksToDistance(m_rightSRX.getSelectedSensorVelocity()) / 0.1);
   }
 
   public Rotation2d getRotation() {
-    return Rotation2d.fromDegrees(-m_pigeon.getYaw());
+    return Rotation2d.fromDegrees(m_pigeon.getYaw());
   }
 
   public SimpleMotorFeedforward gSimpleMotorFeedforward() {
-     return new SimpleMotorFeedforward(ks, kv, ka); //get the values from robot characterization program 
+    return m_feedForward;
   }
 
   public PIDController getLeftPIDController() {
-    return new PIDController(kp,ki,kd);
-
+    return m_leftController;
   }
-
 
   public static double ticksToDistance(double ticks) {
-    return ticks * 1.0 / 4096.0 * 6 * Math.PI / 12.0;
+    return ticks * 1.0 / 4096.0 * 6 * Math.PI * 0.0254;
   }
 
-
-  public void setOutput(double leftVolt, double rightVolt) { 
-     m_leftSRX.setVoltage(leftVolt);
+  public void setOutput(double leftVolt, double rightVolt) {
+    m_leftSRX.setVoltage(leftVolt);
     m_rightSRX.setVoltage(rightVolt);
   }
 
   public Pose2d getPose() {
     return position;
   }
+
   public DifferentialDriveKinematics getKinematics() {
     return diffDrive;
   }
+
   public PIDController getRightPIDController() {
-    return new PIDController(kp, ki, kd); //
+    return m_righController;
   }
   // // These represent our regular encoder objects, which we would
   // // create to use on a real robot.
-  // public Field2d field = new Field2d();
+  public Field2d field = new Field2d();
   // public Encoder m_leftEncoder = new Encoder(0, 1);
   // public Encoder m_rightEncoder = new Encoder(2, 3);
 
@@ -164,21 +154,32 @@ public class Drivetrain extends SubsystemBase {
     m_leftSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
     m_rightSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 
-    m_leftSRX.setSensorPhase(false);
-    m_rightSRX.setSensorPhase(true); 
+    m_leftSRX.setSensorPhase(true);
+    m_rightSRX.setSensorPhase(true);
+
+    m_leftSRX.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 30, 30, 1));
+    m_rightSRX.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 30, 30, 1));
+
+    m_pigeon = pigeon;
+    resetOdo();
   }
 
+  public void resetOdo() {
+    m_pigeon.setYaw(0.0);
+    m_rightSRX.setSelectedSensorPosition(0.0);
+    m_leftSRX.setSelectedSensorPosition(0.0);
+  }
 
   @Override
   public void simulationPeriodic() {
-  /*
+    /*
     m_leftEncoderSim.setDistance(m_driveSim.getLeftPositionMeters());
     m_leftEncoderSim.setRate(m_driveSim.getLeftVelocityMetersPerSecond());
     m_rightEncoderSim.setDistance(m_driveSim.getRightPositionMeters());
     m_rightEncoderSim.setRate(m_driveSim.getRightVelocityMetersPerSecond());
     m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
     */
-  
+
   }
 
   @Override
@@ -188,16 +189,25 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Left Follower Voltage", m_leftSPX.getMotorOutputVoltage());
     SmartDashboard.putNumber("Right Leader Voltage", m_rightSRX.getMotorOutputVoltage());
     SmartDashboard.putNumber("Right Follower Voltage", m_rightSPX.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Gyro Degrees", -m_pigeon.getYaw());
+    SmartDashboard.putNumber("Gyro Degrees", m_pigeon.getYaw());
     SmartDashboard.putNumber("Left Encoder Values", getWheelSpeeds().leftMetersPerSecond);
     SmartDashboard.putNumber("Right Encoder Values", getWheelSpeeds().rightMetersPerSecond);
-    SmartDashboard.putNumber("Left Encoder Distance", ticksToDistance(m_leftSRX.getSelectedSensorPosition()));
-    SmartDashboard.putNumber("Right Encoder Distance",ticksToDistance(m_rightSRX.getSelectedSensorPosition()));
+    SmartDashboard.putNumber("Left Vel Setpoint", m_leftController.getSetpoint());
+    SmartDashboard.putNumber("Right Vel Setpoint", m_righController.getSetpoint());
+    SmartDashboard.putNumber(
+        "Left Encoder Distance", ticksToDistance(m_leftSRX.getSelectedSensorPosition()));
+    SmartDashboard.putNumber(
+        "Right Encoder Distance", ticksToDistance(m_rightSRX.getSelectedSensorPosition()));
+    SmartDashboard.putNumber("Left Encoder Distance Raw", m_leftSRX.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Right Encoder Distance Raw", m_rightSRX.getSelectedSensorPosition());
 
-
-    position = m_Odometry.update(getRotation(), ticksToDistance(m_leftSRX.getSelectedSensorPosition()),ticksToDistance(m_rightSRX.getSelectedSensorPosition()));
-
+    position =
+        m_Odometry.update(
+            getRotation(),
+            ticksToDistance(m_leftSRX.getSelectedSensorPosition()),
+            ticksToDistance(m_rightSRX.getSelectedSensorPosition()));
+    SmartDashboard.putNumber("X ", m_Odometry.getPoseMeters().getX());
+    SmartDashboard.putNumber("Y ", m_Odometry.getPoseMeters().getY());
+    SmartDashboard.putNumber("Rot ", m_Odometry.getPoseMeters().getRotation().getDegrees());
   }
-
-  
 }

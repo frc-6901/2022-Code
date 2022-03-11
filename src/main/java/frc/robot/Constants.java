@@ -57,6 +57,15 @@ public final class Constants {
 
     public static final double kDriveForwardMultiplier = 0.8;
     public static final double kDriveTurnMultiplier = 0.8;
+
+    public static final double kLinearKS = 0.88846;
+    public static final double kLinearKV = 3.2284;
+    public static final double kLinearKA = 0.57427;
+    public static final double kP = 0.687;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double kWheelDiameterInches = 6;
+    public static final double kTrackwidth = 0.56589;
   }
 
   public static final class PneumaticClimbConstants {
