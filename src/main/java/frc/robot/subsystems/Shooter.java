@@ -16,35 +16,45 @@ import frc.robot.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase {
   // Spark Max Motor Controller Object
-  CANSparkMax m_motorLeader =
+  CANSparkMax m_shooterMotorLeader =
       new CANSparkMax(ShooterConstants.kLeftShooterMotorPort, MotorType.kBrushless);
-  CANSparkMax m_motorFollower =
+  CANSparkMax m_shooterMotorFollower =
       new CANSparkMax(ShooterConstants.kRightShooterMotorPort, MotorType.kBrushless);
 
   // Spark Max PID Controller Object
-  private SparkMaxPIDController m_shooterController = m_motorLeader.getPIDController();
+  private SparkMaxPIDController m_shooterController = m_shooterMotorLeader.getPIDController();
 
   // Feed Forward Calculator
   private SimpleMotorFeedforward m_flywheelFeedforward =
       new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV, ShooterConstants.kA);
 
+  // Stores Target RPM
+  private double targetRPM = 0;
+
   /** Creates a new Shooter */
   public Shooter() {
-    m_motorLeader.setInverted(true);
-    m_motorFollower.follow(m_motorLeader, true);
+    m_shooterMotorLeader.setInverted(true);
+    m_shooterMotorFollower.follow(m_shooterMotorLeader, true);
     m_shooterController.setP(ShooterConstants.kP);
   }
 
   // Sets the RPM to the specified parameter
   public void setRPM(int RPM) {
-    double feedForward = m_flywheelFeedforward.calculate(RPM / 60);
-    m_shooterController.setReference(
-        RPM, ControlType.kVelocity, 0, feedForward, ArbFFUnits.kVoltage);
+    targetRPM = RPM;
+  }
+
+  // Checks if the shooter motors have reached their target velocity
+  public boolean atTargetRPM() {
+    double actualRPM = m_shooterMotorLeader.getEncoder().getVelocity();
+    return Math.abs(actualRPM - targetRPM) < ShooterConstants.kShooterRPMThreshold;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter RPM", m_motorLeader.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Shooter RPM", m_shooterMotorLeader.getEncoder().getVelocity());
+    double feedForward = m_flywheelFeedforward.calculate(targetRPM / 60);
+    m_shooterController.setReference(
+        targetRPM, ControlType.kVelocity, 0, feedForward, ArbFFUnits.kVoltage);
   }
 
   @Override

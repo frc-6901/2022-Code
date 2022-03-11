@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -70,7 +69,7 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kX.value)
         .whenPressed(
             () -> {
-              m_shooter.setRPM(ShooterConstants.kShooterTestRPM);
+              m_shooter.setRPM(500);
             },
             m_shooter)
         .whenReleased(
