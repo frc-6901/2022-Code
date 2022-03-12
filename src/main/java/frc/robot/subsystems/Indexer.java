@@ -5,9 +5,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,8 +15,7 @@ import frc.robot.Constants.IndexerConstants;
 public class Indexer extends SubsystemBase {
   private DigitalInput m_ballSensor = new DigitalInput(IndexerConstants.kProximitySensorPort);
   private WPI_TalonSRX m_ballElevatorMotor = new WPI_TalonSRX(IndexerConstants.kBallElevatorPort);
-  private CANSparkMax m_indexerMotor =
-      new CANSparkMax(IndexerConstants.kIndexerPort, MotorType.kBrushed);
+  private WPI_VictorSPX m_indexerMotor = new WPI_VictorSPX(IndexerConstants.kIndexerPort);
 
   private PigeonIMU m_pigeon = new PigeonIMU(m_ballElevatorMotor);
 
