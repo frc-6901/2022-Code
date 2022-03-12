@@ -36,7 +36,7 @@ public final class Constants {
   }
 
   public static final class IndexerConstants {
-    public static final int kProximitySensorPort = 1;
+    public static final int kProximitySensorPort = 0;
     public static final int kBallElevatorPort = 20;
     public static final int kIndexerPort = 21;
 
