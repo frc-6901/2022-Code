@@ -17,9 +17,9 @@ import frc.robot.Constants.ShooterConstants;
 public class Shooter extends SubsystemBase {
   // Spark Max Motor Controller Object
   CANSparkMax m_shooterMotorLeader =
-      new CANSparkMax(ShooterConstants.kLeftShooterMotorPort, MotorType.kBrushless);
+      new CANSparkMax(ShooterConstants.kShooterMotorLeaderPort, MotorType.kBrushless);
   CANSparkMax m_shooterMotorFollower =
-      new CANSparkMax(ShooterConstants.kRightShooterMotorPort, MotorType.kBrushless);
+      new CANSparkMax(ShooterConstants.kShooterMotorFollowerPort, MotorType.kBrushless);
 
   // Spark Max PID Controller Object
   private SparkMaxPIDController m_shooterController = m_shooterMotorLeader.getPIDController();
