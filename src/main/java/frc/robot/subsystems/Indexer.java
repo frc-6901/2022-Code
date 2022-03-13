@@ -76,7 +76,7 @@ public class Indexer extends SubsystemBase {
       indexerPower = 0.0;
     }
     m_ballElevatorMotor.setVoltage(ballElevatorPower);
-    m_indexerMotor.setVoltage(indexerPower);
+    m_indexerMotor.setVoltage(-indexerPower);
   }
 
   /**
