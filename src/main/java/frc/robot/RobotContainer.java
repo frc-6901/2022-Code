@@ -4,18 +4,15 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -196,9 +193,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    TrajectoryConfig setup = new TrajectoryConfig(1.5, 7.5);
-
-    setup.setKinematics(m_drivetrain.getKinematics());
 
     // Trajectory traj = TrajectoryGenerator.generateTrajectory(Arrays.asList(new Pose2d(), new
     // Pose2d(1,0, new Rotation2d())), setup);
@@ -207,23 +201,7 @@ public class RobotContainer {
             new Pose2d(0, 0, new Rotation2d(0)),
             List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
             new Pose2d(3, 0, new Rotation2d(0.0)),
-            setup);
-
-    RamseteCommand command =
-        new RamseteCommand(
-            traj,
-            m_drivetrain::getPose,
-            new RamseteController(2.0, 0.7),
-            m_drivetrain.gSimpleMotorFeedforward(),
-            m_drivetrain.getKinematics(),
-            m_drivetrain::getWheelSpeeds,
-            m_drivetrain.getLeftPIDController(),
-            m_drivetrain.getRightPIDController(),
-            m_drivetrain::setOutput,
-            m_drivetrain);
-
-    return command.andThen(
-        () ->
-            m_drivetrain.setOutput(0, 0)); // run command and after the command stop the drivetrain
+            m_drivetrain.getTrajectoryConfig());
+    return m_drivetrain.getTrajectoryFollowerCommand(traj);
   }
 }

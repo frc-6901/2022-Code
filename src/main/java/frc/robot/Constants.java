@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -58,19 +61,25 @@ public final class Constants {
     public static final double kDriveForwardMultiplier = 0.8;
     public static final double kDriveTurnMultiplier = 0.8;
 
-    public static final double kLinearKS = 0.88846;
-    public static final double kLinearKV = 3.2284;
-    public static final double kLinearKA = 0.57427;
+    public static final double kLinearKS = 0.6;
+    public static final double kLinearKV = 3.2105;
+    public static final double kLinearKA = 0.33214;
     public static final double kAngularKS = 1.3526;
     public static final double kAngularKV = 3.4422;
     public static final double kAngularKA = 0.34065;
 
-    public static final double kP = 0.687;
+    public static final double kP = 0.0;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kWheelDiameterInches = 6;
+    public static final double kWheelCircumferenceMeters = Units.inchesToMeters(6 * Math.PI);
     public static final double kTrackwidth = 0.56589;
+    public static final DifferentialDriveKinematics kDriveKinematics =
+        new DifferentialDriveKinematics(kTrackwidth);
     public static final double kCimToWheelGearing = 10.71;
+
+    public static final double kAutoMaxSpeed = 1.5;
+    public static final double kAutoMaxAccel = 0.5;
   }
 
   public static final class PneumaticClimbConstants {
