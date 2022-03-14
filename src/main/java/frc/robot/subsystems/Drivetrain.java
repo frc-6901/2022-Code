@@ -5,11 +5,17 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.sensors.BasePigeonSimCollection;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,6 +23,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -32,11 +42,18 @@ public class Drivetrain extends SubsystemBase {
   private WPI_TalonSRX m_rightSRX = new WPI_TalonSRX(DrivetrainConstants.kRightSRXDrivePort);
   private WPI_VictorSPX m_rightSPX = new WPI_VictorSPX(DrivetrainConstants.kRightSPXDrivePort);
 
-  private PigeonIMU m_pigeon;
+  private TalonSRXSimCollection m_leftTalonSim = new TalonSRXSimCollection(m_leftSRX);
+  private TalonSRXSimCollection m_rightTalonSim = new TalonSRXSimCollection(m_rightSRX);
+
+  private WPI_PigeonIMU m_pigeon;
+
+  BasePigeonSimCollection m_pigeonSim;
 
   private DifferentialDriveKinematics diffDrive =
       new DifferentialDriveKinematics(DrivetrainConstants.kTrackwidth);
   private DifferentialDrive m_drive = new DifferentialDrive(m_leftSRX, m_rightSRX);
+
+  private DifferentialDrivetrainSim m_drivetrainSim = new DifferentialDrivetrainSim(LinearSystemId.identifyDrivetrainSystem(DrivetrainConstants.kLinearKV, DrivetrainConstants.kLinearKA, DrivetrainConstants.kAngularKV, DrivetrainConstants.kAngularKA), DCMotor.getCIM(2), DrivetrainConstants.kCimToWheelGearing, DrivetrainConstants.kTrackwidth, Units.inchesToMeters(DrivetrainConstants.kWheelDiameterInches / 2), VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
 
   private Pose2d position;
 
@@ -139,7 +156,7 @@ public class Drivetrain extends SubsystemBase {
   // public DifferentialDriveOdometry odom = new DifferentialDriveOdometry(m_gyro.getRotation2d());
 
   /** Creates a new Drivetrain. */
-  public Drivetrain(PigeonIMU pigeon) {
+  public Drivetrain(WPI_PigeonIMU pigeon) {
     m_leftSRX.setNeutralMode(NeutralMode.Brake);
     m_leftSPX.setNeutralMode(NeutralMode.Brake);
     m_rightSRX.setNeutralMode(NeutralMode.Brake);
@@ -147,9 +164,12 @@ public class Drivetrain extends SubsystemBase {
 
     m_pigeon = pigeon;
     m_leftSPX.follow(m_leftSRX);
-    m_rightSRX.setInverted(true);
-    m_rightSPX.setInverted(true);
     m_rightSPX.follow(m_rightSRX);
+    m_rightSPX.setInverted(InvertType.FollowMaster);
+
+    m_rightSRX.setInverted(InvertType.InvertMotorOutput);
+    
+    
 
     m_leftSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
     m_rightSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
@@ -160,7 +180,7 @@ public class Drivetrain extends SubsystemBase {
     m_leftSRX.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 30, 30, 1));
     m_rightSRX.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 30, 30, 1));
 
-    m_pigeon = pigeon;
+    m_pigeonSim = m_pigeon.getSimCollection();
     resetOdo();
   }
 
@@ -172,13 +192,26 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
-    /*
-    m_leftEncoderSim.setDistance(m_driveSim.getLeftPositionMeters());
-    m_leftEncoderSim.setRate(m_driveSim.getLeftVelocityMetersPerSecond());
-    m_rightEncoderSim.setDistance(m_driveSim.getRightPositionMeters());
-    m_rightEncoderSim.setRate(m_driveSim.getRightVelocityMetersPerSecond());
-    m_gyroSim.setAngle(-m_driveSim.getHeading().getDegrees());
-    */
+    m_leftTalonSim.setBusVoltage(RobotController.getBatteryVoltage());
+    m_rightTalonSim.setBusVoltage(RobotController.getBatteryVoltage());
+
+    m_leftTalonSim.setQuadratureRawPosition(
+                    distanceToNativeUnits(
+                      m_drivetrainSim.getLeftPositionMeters()
+                    ));
+                    m_leftTalonSim.setQuadratureVelocity(
+                    velocityToNativeUnits(
+                      m_drivetrainSim.getLeftVelocityMetersPerSecond()
+                    ));
+                    m_rightTalonSim.setQuadratureRawPosition(
+                    distanceToNativeUnits(
+                        -m_drivetrainSim.getRightPositionMeters()
+                    ));
+                    m_rightTalonSim.setQuadratureVelocity(
+                    velocityToNativeUnits(
+                        -m_drivetrainSim.getRightVelocityMetersPerSecond()
+                    ));
+    m_pigeonSim.setRawHeading(m_drivetrainSim.getHeading().getDegrees());
 
   }
 
@@ -203,7 +236,7 @@ public class Drivetrain extends SubsystemBase {
 
     position =
         m_Odometry.update(
-            getRotation(),
+            m_pigeon.getRotation2d(),
             ticksToDistance(m_leftSRX.getSelectedSensorPosition()),
             ticksToDistance(m_rightSRX.getSelectedSensorPosition()));
     SmartDashboard.putNumber("X ", m_Odometry.getPoseMeters().getX());
