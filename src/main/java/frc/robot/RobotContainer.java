@@ -70,7 +70,7 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kX.value)
         .whenPressed(
             () -> {
-              m_shooter.setRPM(ShooterConstants.kShooterTestRPM);
+              m_shooter.setRPM(ShooterConstants.kShooterFenderRPM);
             },
             m_shooter)
         .whenReleased(
