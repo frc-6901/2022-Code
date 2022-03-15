@@ -44,6 +44,7 @@ public final class Constants {
     public static final double kPassivePower = 5;
     public static final double kFeedingPower = 8;
     public static final double kIndexerPower = 7;
+    public static final int kIndexerShootingTimeout = 4;
   }
 
   public static final class DrivetrainConstants {
