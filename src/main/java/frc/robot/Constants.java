@@ -41,8 +41,8 @@ public final class Constants {
     public static final int kBallElevatorPort = 20;
     public static final int kIndexerPort = 21;
 
-    public static final double kPassivePower = 5;
-    public static final double kFeedingPower = 8;
+    public static final double kPassivePower = 6;
+    public static final double kFeedingPower = 8.5;
     public static final double kIndexerPower = 7;
   }
 

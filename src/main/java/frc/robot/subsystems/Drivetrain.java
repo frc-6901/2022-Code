@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
@@ -29,6 +30,11 @@ public class Drivetrain extends SubsystemBase {
     m_rightSRX.setInverted(true);
     m_rightSPX.setInverted(true);
     m_rightSPX.follow(m_rightSRX);
+
+    m_leftSRX.setNeutralMode(NeutralMode.Brake);
+    m_leftSPX.setNeutralMode(NeutralMode.Brake);
+    m_rightSRX.setNeutralMode(NeutralMode.Brake);
+    m_rightSPX.setNeutralMode(NeutralMode.Brake);
 
     m_pigeon = pigeon;
   }

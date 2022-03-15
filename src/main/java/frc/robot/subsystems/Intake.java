@@ -24,7 +24,9 @@ public class Intake extends SubsystemBase {
   WPI_VictorSPX m_intakeMotor = new WPI_VictorSPX(IntakeConstants.kIntakeMotorPort);
 
   /** Creates a new Intake. */
-  public Intake() {}
+  public Intake() {
+    m_intakeSolenoid.set(kReverse);
+  }
 
   public void extendIntake() {
     m_intakeSolenoid.set(kForward);
