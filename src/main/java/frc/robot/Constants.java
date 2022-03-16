@@ -17,7 +17,7 @@ public final class Constants {
     public static final int kShooterMotorLeaderPort = 1;
     public static final int kShooterMotorFollowerPort = 2;
     public static final int kShooterFenderRPM = 1950;
-    public static final int kShooterRPMThreshold = 200;
+    public static final int kShooterRPMThreshold = 50;
     public static final double kPower = 0.6;
     public static final double kS = 0.23638;
     public static final double kV = 0.1292;
@@ -33,7 +33,7 @@ public final class Constants {
   public static final class IntakeConstants {
     public static final int kIntakeSolenoidPorts[] = {1, 0};
     public static final int kIntakeMotorPort = 10;
-    public static final int kIntakeVoltage = 5;
+    public static final int kIntakeVoltage = 6;
   }
 
   public static final class IndexerConstants {

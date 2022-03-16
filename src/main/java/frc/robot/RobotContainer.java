@@ -77,7 +77,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_operatorController, Button.kX.value)
-        .whenPressed(
+        .whileHeld(
             new RunCommand(
                     () -> {
                       m_shooter.setRPM(ShooterConstants.kShooterFenderRPM);
