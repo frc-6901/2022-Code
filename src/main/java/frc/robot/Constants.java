@@ -16,9 +16,10 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int kShooterMotorLeaderPort = 1;
     public static final int kShooterMotorFollowerPort = 2;
-    public static final int kShooterFenderRPM = 1950;
-    public static final int kShooterRPMThreshold = 50;
+    public static final double kShooterFenderRPM = 1950;
+    public static final double kShooterRPMThreshold = 50;
     public static final double kPower = 0.6;
+    // TODO: Rerun SysId
     public static final double kS = 0.23638;
     public static final double kV = 0.1292;
     public static final double kA = 0.0094019;
@@ -41,8 +42,8 @@ public final class Constants {
     public static final int kBallElevatorPort = 20;
     public static final int kIndexerPort = 21;
 
-    public static final double kPassivePower = 4;
-    public static final double kFeedingPower = 5;
+    public static final double kPassivePower = 3;
+    public static final double kFeedingPower = 5.5;
     public static final double kIndexerPower = 7;
     public static final int kIndexerShootingTimeout = 4;
   }

@@ -28,9 +28,6 @@ public class Shooter extends SubsystemBase {
   private SimpleMotorFeedforward m_flywheelFeedforward =
       new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV, ShooterConstants.kA);
 
-  // Stores Target RPM
-  private double targetRPM = 0;
-
   /** Creates a new Shooter */
   public Shooter() {
     m_shooterMotorLeader.setInverted(true);
@@ -38,23 +35,19 @@ public class Shooter extends SubsystemBase {
     m_shooterController.setP(ShooterConstants.kP);
   }
 
-  // Sets the RPM to the specified parameter
-  public void setRPM(int RPM) {
-    targetRPM = RPM;
+  public void setRPM(double RPM) {
+    double feedForward = m_flywheelFeedforward.calculate(RPM / 60);
+    m_shooterController.setReference(
+        RPM, ControlType.kVelocity, 0, feedForward, ArbFFUnits.kVoltage);
   }
 
-  // Checks if the shooter motors have reached their target velocity
-  public boolean atTargetRPM() {
-    double actualRPM = m_shooterMotorLeader.getEncoder().getVelocity();
-    return Math.abs(actualRPM - targetRPM) < ShooterConstants.kShooterRPMThreshold;
+  public double getRPM() {
+    return m_shooterMotorLeader.getEncoder().getVelocity() * 2;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter RPM", m_shooterMotorLeader.getEncoder().getVelocity());
-    double feedForward = m_flywheelFeedforward.calculate(targetRPM / 60);
-    m_shooterController.setReference(
-        targetRPM, ControlType.kVelocity, 0, feedForward, ArbFFUnits.kVoltage);
+    SmartDashboard.putNumber("Shooter RPM", getRPM());
   }
 
   @Override
