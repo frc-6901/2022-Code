@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -56,6 +57,14 @@ public class RobotContainer {
                   DrivetrainConstants.kDriveTurnMultiplier * m_navigatorController.getRightX());
             },
             m_drivetrain));
+
+    m_indexer.setDefaultCommand(
+        new RunCommand(
+            () -> {
+              m_indexer.setState(IndexerState.kPassive);
+            },
+            m_indexer));
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -69,10 +78,19 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(m_operatorController, Button.kX.value)
         .whenPressed(
-            () -> {
-              m_shooter.setRPM(ShooterConstants.kShooterFenderRPM);
-            },
-            m_shooter)
+            new RunCommand(
+                    () -> {
+                      m_shooter.setRPM(ShooterConstants.kShooterFenderRPM);
+                    },
+                    m_shooter)
+                .until(m_shooter::atTargetRPM)
+                .andThen(
+                    new RunCommand(
+                            () -> {
+                              m_indexer.setState(IndexerState.kFeeding);
+                            },
+                            m_indexer)
+                        .withTimeout(IndexerConstants.kIndexerShootingTimeout)))
         .whenReleased(
             () -> {
               m_shooter.setRPM(0);
