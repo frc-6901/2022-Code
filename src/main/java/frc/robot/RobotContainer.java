@@ -12,9 +12,10 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ResetShooter;
+import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Indexer;
@@ -77,25 +78,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_operatorController, Button.kX.value)
-        .whileHeld(
-            new RunCommand(
-                    () -> {
-                      m_shooter.setRPM(ShooterConstants.kShooterFenderRPM);
-                    },
-                    m_shooter)
-                .until(m_shooter::atTargetRPM)
-                .andThen(
-                    new RunCommand(
-                            () -> {
-                              m_indexer.setState(IndexerState.kFeeding);
-                            },
-                            m_indexer)
-                        .withTimeout(IndexerConstants.kIndexerShootingTimeout)))
-        .whenReleased(
-            () -> {
-              m_shooter.setRPM(0);
-            },
-            m_shooter);
+        .whileHeld(new ShootCommand(ShooterConstants.kShooterFenderRPM, m_shooter, m_indexer))
+        .whenReleased(new ResetShooter(m_shooter, m_indexer));
 
     new JoystickButton(m_operatorController, Button.kLeftBumper.value)
         .whenPressed(
