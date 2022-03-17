@@ -194,7 +194,6 @@ public class Drivetrain extends SubsystemBase {
 
   public Command getTrajectoryFollowerCommand(Trajectory traj) {
     RamseteController driveController = new RamseteController(2.0, 0.7);
-    driveController.setEnabled(false);
     RamseteCommand command =
         new RamseteCommand(
             traj,
