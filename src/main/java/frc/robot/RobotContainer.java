@@ -118,7 +118,7 @@ public class RobotContainer {
             });
 
     new JoystickButton(m_operatorController, Button.kB.value)
-        .whenPressed(
+        .whileHeld(
             () -> {
               m_indexer.setState(IndexerState.kFeeding);
             },
@@ -130,7 +130,7 @@ public class RobotContainer {
             m_indexer);
 
     new JoystickButton(m_operatorController, Button.kA.value)
-        .whenPressed(
+        .whileHeld(
             () -> {
               m_indexer.setState(IndexerState.kReverse);
             },
