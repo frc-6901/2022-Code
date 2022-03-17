@@ -68,7 +68,7 @@ public final class Constants {
     public static final double kAngularKV = 3.4422;
     public static final double kAngularKA = 0.34065;
 
-    public static final double kP = 0.0;
+    public static final double kP = 1.5;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kWheelDiameterInches = 6;
@@ -77,6 +77,14 @@ public final class Constants {
     public static final DifferentialDriveKinematics kDriveKinematics =
         new DifferentialDriveKinematics(kTrackwidth);
     public static final double kCimToWheelGearing = 10.71;
+
+    public static final double kAngularKP = .1;
+    public static final double kAngularKD = .0;
+
+    public static final double kMaxTurnRate = 100;
+    public static final double kMaxTurnAccel = 10;
+    public static final double kDegreeTolerance = 0.75;
+    public static final double kTurnRateTolerance = 1.5;
 
     public static final double kAutoMaxSpeed = 1.5;
     public static final double kAutoMaxAccel = 0.5;

@@ -18,6 +18,7 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -83,6 +84,9 @@ public class Drivetrain extends SubsystemBase {
           DrivetrainConstants.kLinearKS,
           DrivetrainConstants.kLinearKV,
           DrivetrainConstants.kLinearKA);
+  
+  private SimpleMotorFeedforward m_angularFeedForward = new SimpleMotorFeedforward(DrivetrainConstants.kAngularKS, DrivetrainConstants.kAngularKV, DrivetrainConstants.kAngularKA);
+  private PIDController m_angularPIDController = new PIDController(DrivetrainConstants.kAngularKP, 0.0, DrivetrainConstants.kAngularKD);
 
   private TrajectoryConfig m_trajectoryConfig;
 
@@ -161,6 +165,10 @@ public class Drivetrain extends SubsystemBase {
     return m_feedForward;
   }
 
+  public SimpleMotorFeedforward getAngularFeedforward() {
+    return m_angularFeedForward;
+  }
+
   public PIDController getLeftPIDController() {
     return m_leftController;
   }
@@ -186,6 +194,18 @@ public class Drivetrain extends SubsystemBase {
     m_pigeon.setYaw(0.0);
     m_rightSRX.setSelectedSensorPosition(0.0);
     m_leftSRX.setSelectedSensorPosition(0.0);
+  }
+
+  public void resetGyro() {
+    m_pigeon.setYaw(0.0);
+    if (RobotBase.isSimulation()) {
+      m_pigeonSim.setRawHeading(0.0);
+      m_drivetrainSim.setPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+    }
+  }
+
+  public double getHeading() {
+    return m_pigeon.getYaw();
   }
 
   public TrajectoryConfig getTrajectoryConfig() {
@@ -251,7 +271,7 @@ public class Drivetrain extends SubsystemBase {
                 m_rightSRX.getSelectedSensorPosition(),
                 DrivetrainConstants.kWheelCircumferenceMeters));
 
-    SmartDashboard.putNumber("Gyro Leader Voltage", m_leftSRX.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Left Leader Voltage", m_leftSRX.getMotorOutputVoltage());
     SmartDashboard.putNumber("Left Follower Voltage", m_leftSPX.getMotorOutputVoltage());
     SmartDashboard.putNumber("Right Leader Voltage", m_rightSRX.getMotorOutputVoltage());
     SmartDashboard.putNumber("Right Follower Voltage", m_rightSPX.getMotorOutputVoltage());
