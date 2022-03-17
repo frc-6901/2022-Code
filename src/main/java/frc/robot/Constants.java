@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.util.InterpolatingDouble;
+import frc.robot.util.InterpolatingTreeMap;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -131,5 +133,34 @@ public final class Constants {
     // Acceleration should get to max velocity in half the time it takes to move all the way across
     // (mainly a guess number)
     public static final double kMaxAccel = kMaxVelocity / 0.25;
+  }
+
+  public static final class LimelightConstants {
+    public static final double kLensHeightMeters = Units.inchesToMeters(27.299450);
+    public static final double kMountAngleDegrees = 50.000000;
+    public static final double kTargetHeightMeters = Units.inchesToMeters(104.0 - 1.0);
+
+    public static final double kLimelightP = 0.45;
+    public static final double kLimelightD = 0.0;
+
+    public static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> kShooterRPMMap =
+        new InterpolatingTreeMap<>();
+
+    static {
+      kShooterRPMMap.put(new InterpolatingDouble(0.97), new InterpolatingDouble(1450.0));
+      kShooterRPMMap.put(new InterpolatingDouble(1.72), new InterpolatingDouble(1600.0));
+      kShooterRPMMap.put(new InterpolatingDouble(2.33), new InterpolatingDouble(1700.0));
+      kShooterRPMMap.put(new InterpolatingDouble(3.05), new InterpolatingDouble(1875.0));
+    }
+
+    public static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> kHoodMap =
+        new InterpolatingTreeMap<>();
+
+    static {
+      kHoodMap.put(new InterpolatingDouble(0.97), new InterpolatingDouble(8.0));
+      kHoodMap.put(new InterpolatingDouble(1.72), new InterpolatingDouble(20.0));
+      kHoodMap.put(new InterpolatingDouble(2.33), new InterpolatingDouble(23.5));
+      kHoodMap.put(new InterpolatingDouble(3.05), new InterpolatingDouble(28.5));
+    }
   }
 }

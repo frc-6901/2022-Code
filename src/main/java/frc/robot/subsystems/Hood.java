@@ -102,8 +102,7 @@ public class Hood extends SubsystemBase {
   }
 
   public boolean atTargetPosition() {
-    return Math.abs(Units.radiansToDegrees(m_goal.position) - getPositionDegrees())
-        < HoodConstants.kMaxDegreeError;
+    return Math.abs(m_targetAngle - getPositionDegrees()) < HoodConstants.kMaxDegreeError;
   }
 
   @Override
