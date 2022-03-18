@@ -77,7 +77,7 @@ public class Drivetrain extends SubsystemBase {
 
   private PIDController m_leftController =
       new PIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD);
-  private PIDController m_righController =
+  private PIDController m_rightController =
       new PIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD);
   private SimpleMotorFeedforward m_feedForward =
       new SimpleMotorFeedforward(
@@ -86,7 +86,6 @@ public class Drivetrain extends SubsystemBase {
           DrivetrainConstants.kLinearKA);
   
   private SimpleMotorFeedforward m_angularFeedForward = new SimpleMotorFeedforward(DrivetrainConstants.kAngularKS, DrivetrainConstants.kAngularKV, DrivetrainConstants.kAngularKA);
-  private PIDController m_angularPIDController = new PIDController(DrivetrainConstants.kAngularKP, 0.0, DrivetrainConstants.kAngularKD);
 
   private TrajectoryConfig m_trajectoryConfig;
 
@@ -94,15 +93,21 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain(WPI_PigeonIMU pigeon) {
     m_leftSPX.follow(m_leftSRX);
     m_rightSPX.follow(m_rightSRX);
-    m_rightSPX.setInverted(InvertType.FollowMaster);
 
     m_rightSRX.setInverted(InvertType.InvertMotorOutput);
+    m_rightSPX.setInverted(InvertType.FollowMaster);
 
     m_leftSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
     m_rightSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 
-    m_leftSRX.setSensorPhase(false);
+    if (RobotBase.isSimulation()) {
+      m_leftSRX.setSensorPhase(false);
     m_rightSRX.setSensorPhase(false);
+    } else {
+      m_leftSRX.setSensorPhase(true);
+    m_rightSRX.setSensorPhase(true);
+    }
+    
 
     m_leftSRX.setNeutralMode(NeutralMode.Brake);
     m_rightSRX.setNeutralMode(NeutralMode.Brake);
@@ -187,7 +192,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public PIDController getRightPIDController() {
-    return m_righController;
+    return m_rightController;
   }
 
   public void resetOdo() {
@@ -279,7 +284,7 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Left Encoder Values", getWheelSpeeds().leftMetersPerSecond);
     SmartDashboard.putNumber("Right Encoder Values", getWheelSpeeds().rightMetersPerSecond);
     SmartDashboard.putNumber("Left Vel Setpoint", m_leftController.getSetpoint());
-    SmartDashboard.putNumber("Right Vel Setpoint", m_righController.getSetpoint());
+    SmartDashboard.putNumber("Right Vel Setpoint", m_rightController.getSetpoint());
     SmartDashboard.putNumber(
         "Left Velocity",
         MagEncoderUtil.nativeUnitsToVelocity(
