@@ -5,10 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,19 +29,23 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter */
   public Shooter() {
+    m_shooterMotorLeader.restoreFactoryDefaults();
+    m_shooterMotorFollower.restoreFactoryDefaults();
     m_shooterMotorLeader.setInverted(true);
     m_shooterMotorFollower.follow(m_shooterMotorLeader, true);
     m_shooterController.setP(ShooterConstants.kP);
+
+    m_shooterMotorLeader.setIdleMode(IdleMode.kCoast);
+    m_shooterMotorFollower.setIdleMode(IdleMode.kCoast);
   }
 
   public void setRPM(double RPM) {
     double feedForward = m_flywheelFeedforward.calculate(RPM / 60);
-    m_shooterController.setReference(
-        RPM, ControlType.kVelocity, 0, feedForward, ArbFFUnits.kVoltage);
+    m_shooterMotorLeader.setVoltage(feedForward);
   }
 
   public double getRPM() {
-    return m_shooterMotorLeader.getEncoder().getVelocity() * 2;
+    return m_shooterMotorLeader.getEncoder().getVelocity();
   }
 
   @Override

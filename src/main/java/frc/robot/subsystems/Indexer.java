@@ -33,7 +33,10 @@ public class Indexer extends SubsystemBase {
     kStopped
   }
   /** Creates a new Indexer. */
-  public Indexer() {}
+  public Indexer() {
+    m_ballElevatorMotor.configFactoryDefault();
+    m_indexerMotor.configFactoryDefault();
+  }
 
   /**
    * Get the pigeon hooked to the indexer Talon SRX

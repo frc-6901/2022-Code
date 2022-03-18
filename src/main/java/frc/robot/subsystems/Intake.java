@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kForward;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kOff;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kReverse;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -25,7 +26,8 @@ public class Intake extends SubsystemBase {
 
   /** Creates a new Intake. */
   public Intake() {
-    m_intakeSolenoid.set(kReverse);
+    m_intakeMotor.configFactoryDefault();
+    m_intakeSolenoid.set(kOff);
   }
 
   public void extendIntake() {

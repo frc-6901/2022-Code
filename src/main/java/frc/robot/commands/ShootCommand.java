@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Shooter;
@@ -19,9 +20,11 @@ public class ShootCommand extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new SetFlywheelSpeed(RPM, shooter, indexer),
+        new SetFlywheelSpeed(RPM, shooter, indexer)
+            .withTimeout(ShooterConstants.kRampUpTimeoutSeconds),
         new RunCommand(
             () -> {
+              shooter.setRPM(RPM);
               indexer.setState(IndexerState.kFeeding);
             },
             indexer));
@@ -31,7 +34,8 @@ public class ShootCommand extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new SetFlywheelSpeed(RPM, shooter, indexer),
+        new SetFlywheelSpeed(RPM, shooter, indexer)
+            .withTimeout(ShooterConstants.kRampUpTimeoutSeconds),
         new RunCommand(
                 () -> {
                   indexer.setState(IndexerState.kFeeding);
