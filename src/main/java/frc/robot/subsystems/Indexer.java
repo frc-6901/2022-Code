@@ -6,7 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,7 +17,7 @@ public class Indexer extends SubsystemBase {
   private WPI_TalonSRX m_ballElevatorMotor = new WPI_TalonSRX(IndexerConstants.kBallElevatorPort);
   private WPI_VictorSPX m_indexerMotor = new WPI_VictorSPX(IndexerConstants.kIndexerPort);
 
-  private PigeonIMU m_pigeon = new PigeonIMU(m_ballElevatorMotor);
+  private WPI_PigeonIMU m_pigeon = new WPI_PigeonIMU(m_ballElevatorMotor);
 
   private IndexerState m_indexerState = IndexerState.kPassive;
 
@@ -43,7 +43,7 @@ public class Indexer extends SubsystemBase {
    *
    * @return Pigeon object hooked to the Talon SRX
    */
-  public PigeonIMU getPigeon() {
+  public WPI_PigeonIMU getPigeon() {
     return m_pigeon;
   }
 

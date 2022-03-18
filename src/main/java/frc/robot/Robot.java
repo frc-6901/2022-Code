@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import java.nio.file.Path;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,6 +23,11 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private String jsonString = "C:/Users/piphi/Downloads/PathWeaver/output/Unnamed_0.wpilib.json";
+  Trajectory test = new Trajectory();
+
+  ///// NOTE: MAX VELOCITY: 2.0 and MAX ACCERALATION: 10]
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -28,6 +37,19 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    try {
+      Path path = Filesystem.getDeployDirectory().toPath().resolve(jsonString);
+      test = TrajectoryUtil.fromPathweaverJson(path);
+    } catch (Exception e) {
+
+    }
+
+    if (test == null) {
+      System.out.println("Bruh");
+    }
+
+    m_robotContainer.setTrajectory(test);
   }
 
   /**
@@ -66,7 +88,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    CommandScheduler.getInstance().run();
+  }
 
   @Override
   public void teleopInit() {
