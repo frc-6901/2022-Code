@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DrivetrainConstants;
@@ -152,27 +153,26 @@ public class RobotContainer {
               m_indexer.setState(IndexerState.kPassive);
             },
             m_indexer);
-
-    new JoystickButton(m_operatorController, Button.kB.value)
+    new POVButton(m_operatorController, 90)
         .whenPressed(
             () -> {
               m_pneumaticClimb.extendClimb();
             },
             m_pneumaticClimb);
 
-    new JoystickButton(m_operatorController, Button.kY.value)
+    new POVButton(m_operatorController, 270)
         .whenPressed(
             () -> {
               m_pneumaticClimb.retractClimb();
             },
             m_pneumaticClimb);
-    new JoystickButton(m_operatorController, Button.kStart.value)
+    new POVButton(m_operatorController, 0)
         .whileHeld(
             () -> {
               m_climb.setClimb(ClimbConstants.kClimbPower);
             },
             m_climb);
-    new JoystickButton(m_operatorController, Button.kBack.value)
+    new POVButton(m_operatorController, 180)
         .whileHeld(
             () -> {
               m_climb.setClimb(-ClimbConstants.kClimbPower);
