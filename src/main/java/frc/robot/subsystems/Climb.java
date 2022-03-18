@@ -13,10 +13,14 @@ import frc.robot.Constants.ClimbConstants;
 public class Climb extends SubsystemBase {
   private CANSparkMax m_leftClimbSide =
       new CANSparkMax(ClimbConstants.kLeftClimberPort, MotorType.kBrushless);
-  private CANSparkMax m_rightClimbSide = new CANSparkMax(ClimbConstants.kRightClimberPort, MotorType.kBrushless);
+  private CANSparkMax m_rightClimbSide =
+      new CANSparkMax(ClimbConstants.kRightClimberPort, MotorType.kBrushless);
 
   /** Creates a new Climb. */
   public Climb() {
+    m_leftClimbSide.restoreFactoryDefaults();
+    m_rightClimbSide.restoreFactoryDefaults();
+
     m_leftClimbSide.setIdleMode(IdleMode.kBrake);
     m_rightClimbSide.setIdleMode(IdleMode.kBrake);
     m_rightClimbSide.follow(m_leftClimbSide, true);
