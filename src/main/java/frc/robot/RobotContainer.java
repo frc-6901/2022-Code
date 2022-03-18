@@ -10,17 +10,21 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ResetShooter;
 import frc.robot.commands.ShootCommand;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.PneumaticClimb;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -35,6 +39,7 @@ public class RobotContainer {
       new ExampleSubsystem(); // you said not to mess with this
   private final Shooter m_shooter = new Shooter();
   private final Intake m_intake = new Intake();
+  private final PneumaticClimb m_pneumaticClimb = new PneumaticClimb();
 
   private final ExampleCommand m_autoCommand =
       new ExampleCommand(m_subsystem); // you said not to mess with this
@@ -42,6 +47,8 @@ public class RobotContainer {
   private final Indexer m_indexer = new Indexer();
 
   private final Drivetrain m_drivetrain = new Drivetrain(m_indexer.getPigeon());
+
+  private final Climb m_climb = new Climb();
 
   private final XboxController m_navigatorController =
       new XboxController(ControllerConstants.kNavigatorPort);
@@ -66,6 +73,12 @@ public class RobotContainer {
             },
             m_indexer));
 
+    m_climb.setDefaultCommand(
+        (new RunCommand(
+            () -> {
+              m_climb.setClimb(0.0);
+            },
+            m_climb)));
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -140,6 +153,31 @@ public class RobotContainer {
               m_indexer.setState(IndexerState.kPassive);
             },
             m_indexer);
+    new POVButton(m_operatorController, 90)
+        .whenPressed(
+            () -> {
+              m_pneumaticClimb.extendClimb();
+            },
+            m_pneumaticClimb);
+
+    new POVButton(m_operatorController, 270)
+        .whenPressed(
+            () -> {
+              m_pneumaticClimb.retractClimb();
+            },
+            m_pneumaticClimb);
+    new POVButton(m_operatorController, 0)
+        .whileHeld(
+            () -> {
+              m_climb.setClimb(ClimbConstants.kClimbPower);
+            },
+            m_climb);
+    new POVButton(m_operatorController, 180)
+        .whileHeld(
+            () -> {
+              m_climb.setClimb(-ClimbConstants.kClimbPower);
+            },
+            m_climb);
   }
 
   /**

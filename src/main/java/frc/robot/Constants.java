@@ -58,4 +58,15 @@ public final class Constants {
     public static final double kDriveForwardMultiplier = 0.8;
     public static final double kDriveTurnMultiplier = 0.8;
   }
+
+  public static final class PneumaticClimbConstants {
+    public static final int kClimbSolenoidPorts[] = {3, 2};
+  }
+
+  public static final class ClimbConstants {
+    public static final int kLeftClimberPort = 40;
+    public static final int kRightClimberPort = 41;
+
+    public static final double kClimbPower = 0.4;
+  }
 }
