@@ -4,18 +4,13 @@
 
 package frc.robot;
 
-import java.nio.file.Path;
-import java.sql.Driver;
-
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.simulation.DriverStationSim;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import java.nio.file.Path;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -33,7 +28,6 @@ public class Robot extends TimedRobot {
 
   ///// NOTE: MAX VELOCITY: 2.0 and MAX ACCERALATION: 10]
 
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -47,16 +41,12 @@ public class Robot extends TimedRobot {
     try {
       Path path = Filesystem.getDeployDirectory().toPath().resolve(jsonString);
       test = TrajectoryUtil.fromPathweaverJson(path);
-    }
-    
+    } catch (Exception e) {
 
-    catch (Exception e) {
-     
     }
 
     if (test == null) {
       System.out.println("Bruh");
-
     }
 
     m_robotContainer.setTrajectory(test);

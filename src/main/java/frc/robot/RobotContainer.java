@@ -4,11 +4,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -31,7 +27,6 @@ import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PneumaticClimb;
 import frc.robot.subsystems.Shooter;
-import java.util.List;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -90,7 +85,7 @@ public class RobotContainer {
   }
 
   public void setTrajectory(Trajectory t) {
-      trajectory = t;
+    trajectory = t;
   }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by

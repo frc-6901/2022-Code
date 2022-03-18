@@ -84,8 +84,12 @@ public class Drivetrain extends SubsystemBase {
           DrivetrainConstants.kLinearKS,
           DrivetrainConstants.kLinearKV,
           DrivetrainConstants.kLinearKA);
-  
-  private SimpleMotorFeedforward m_angularFeedForward = new SimpleMotorFeedforward(DrivetrainConstants.kAngularKS, DrivetrainConstants.kAngularKV, DrivetrainConstants.kAngularKA);
+
+  private SimpleMotorFeedforward m_angularFeedForward =
+      new SimpleMotorFeedforward(
+          DrivetrainConstants.kAngularKS,
+          DrivetrainConstants.kAngularKV,
+          DrivetrainConstants.kAngularKA);
 
   private TrajectoryConfig m_trajectoryConfig;
 
@@ -102,12 +106,11 @@ public class Drivetrain extends SubsystemBase {
 
     if (RobotBase.isSimulation()) {
       m_leftSRX.setSensorPhase(false);
-    m_rightSRX.setSensorPhase(false);
+      m_rightSRX.setSensorPhase(false);
     } else {
       m_leftSRX.setSensorPhase(true);
-    m_rightSRX.setSensorPhase(true);
+      m_rightSRX.setSensorPhase(true);
     }
-    
 
     m_leftSRX.setNeutralMode(NeutralMode.Brake);
     m_rightSRX.setNeutralMode(NeutralMode.Brake);

@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.Constants.DrivetrainConstants;
@@ -15,11 +14,10 @@ import frc.robot.subsystems.Drivetrain;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class TurnAngle extends ProfiledPIDCommand {
- 
+
   /** Creates a new TurnAngle. */
   public TurnAngle(double angle, Drivetrain drive) {
-    
-    
+
     super(
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
@@ -28,7 +26,8 @@ public class TurnAngle extends ProfiledPIDCommand {
             0,
             DrivetrainConstants.kAngularKD,
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(DrivetrainConstants.kMaxTurnRate, DrivetrainConstants.kMaxTurnAccel)),
+            new TrapezoidProfile.Constraints(
+                DrivetrainConstants.kMaxTurnRate, DrivetrainConstants.kMaxTurnAccel)),
         // This should return the measurement
         drive::getHeading,
         // This should return the goal (can also be a constant)
