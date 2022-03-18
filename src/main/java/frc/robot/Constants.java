@@ -86,8 +86,8 @@ public final class Constants {
     public static final double kDegreeTolerance = 0.75;
     public static final double kTurnRateTolerance = 1.5;
 
-    public static final double kAutoMaxSpeed = 1.5;
-    public static final double kAutoMaxAccel = 0.5;
+    public static final double kAutoMaxSpeed = 3;
+    public static final double kAutoMaxAccel = 3;
   }
 
   public static final class PneumaticClimbConstants {

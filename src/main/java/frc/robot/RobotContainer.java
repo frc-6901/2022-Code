@@ -8,7 +8,10 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -16,9 +19,10 @@ import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.OneBallAuto;
 import frc.robot.commands.ResetShooter;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.TwoBallAuto;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -42,14 +46,38 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final PneumaticClimb m_pneumaticClimb = new PneumaticClimb();
 
-  private final ExampleCommand m_autoCommand =
-      new ExampleCommand(m_subsystem); // you said not to mess with this
-
   private final Indexer m_indexer = new Indexer();
 
   private final Drivetrain m_drivetrain = new Drivetrain(m_indexer.getPigeon());
 
   private final Climb m_climb = new Climb();
+
+  private final OneBallAuto m_oneBallAuto = new OneBallAuto(m_drivetrain, m_shooter, m_indexer);
+
+  private final TwoBallAuto m_twoBallAuto =
+      new TwoBallAuto(m_drivetrain, m_shooter, m_indexer, m_intake);
+
+  private final Command m_crossWithTimer =
+      new RunCommand(
+              () -> {
+                m_drivetrain.drive(0.3, 0.0);
+              },
+              m_drivetrain)
+          .withTimeout(2.5)
+          .andThen(
+              () -> {
+                m_drivetrain.drive(0.0, 0.0);
+              },
+              m_drivetrain);
+
+  private final Command m_noAuto =
+      new InstantCommand(
+          () -> {
+            m_drivetrain.drive(0.0, 0.0);
+          },
+          m_drivetrain);
+
+  SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
   private final XboxController m_navigatorController =
       new XboxController(ControllerConstants.kNavigatorPort);
@@ -82,6 +110,12 @@ public class RobotContainer {
             m_climb)));
     // Configure the button bindings
     configureButtonBindings();
+
+    m_autoChooser.setDefaultOption("No Auto", m_noAuto);
+    m_autoChooser.addOption("Cross the line", m_crossWithTimer);
+    m_autoChooser.addOption("Single Ball", m_oneBallAuto);
+    m_autoChooser.addOption("Two Ball", m_twoBallAuto);
+    Shuffleboard.getTab("Autonomous").add(m_autoChooser);
   }
 
   public void setTrajectory(Trajectory t) {
@@ -190,16 +224,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-
-    // Trajectory traj = TrajectoryGenerator.generateTrajectory(Arrays.asList(new Pose2d(), new
-    // Pose2d(1,0, new Rotation2d())), setup);
-    // Trajectory traj =
-    //     TrajectoryGenerator.generateTrajectory(
-    //         new Pose2d(0, 0, new Rotation2d(0)),
-    //         List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-    //         new Pose2d(3, 0, new Rotation2d(0.0)),
-    //         m_drivetrain.getTrajectoryConfig());
-    return m_drivetrain.getTrajectoryFollowerCommand(trajectory);
+    return m_autoChooser.getSelected();
   }
 }
