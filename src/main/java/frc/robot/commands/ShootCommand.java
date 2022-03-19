@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ShooterConstants;
@@ -41,6 +42,12 @@ public class ShootCommand extends SequentialCommandGroup {
                   indexer.setState(IndexerState.kFeeding);
                 },
                 indexer)
-            .withTimeout(durationSeconds));
+            .withTimeout(durationSeconds),
+        new InstantCommand(
+            () -> {
+              shooter.setRPM(0);
+              indexer.setState(IndexerState.kPassive);
+            },
+            shooter));
   }
 }

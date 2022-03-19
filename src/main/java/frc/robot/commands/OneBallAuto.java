@@ -4,17 +4,13 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
-import java.util.ArrayList;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -25,14 +21,18 @@ public class OneBallAuto extends SequentialCommandGroup {
     addRequirements(drive, shooter);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    var trajectory =
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            new ArrayList<Translation2d>(),
-            new Pose2d(Units.feetToMeters(7.75), 0, new Rotation2d(0)),
-            drive.getTrajectoryConfig());
     addCommands(
         new ShootCommand(ShooterConstants.kShooterFenderRPM, 4.0, shooter, indexer),
-        drive.getTrajectoryFollowerCommand(trajectory));
+        new RunCommand(
+                () -> {
+                  drive.drive(0.5, 0.0);
+                },
+                drive)
+            .withTimeout(DrivetrainConstants.kAutoTime)
+            .andThen(
+                () -> {
+                  drive.setOutput(0.0, 0.0);
+                },
+                drive));
   }
 }

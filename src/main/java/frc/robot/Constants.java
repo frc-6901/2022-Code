@@ -19,7 +19,7 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int kShooterMotorLeaderPort = 1;
     public static final int kShooterMotorFollowerPort = 2;
-    public static final double kShooterFenderRPM = 1700;
+    public static final double kShooterFenderRPM = 1500;
     public static final double kShooterRPMThreshold = 75;
     public static final double kPower = 0.6;
     public static final double kS = 0.39592;
@@ -58,22 +58,22 @@ public final class Constants {
     public static final int kRightSRXDrivePort = 3;
     public static final int kRightSPXDrivePort = 4;
 
-    public static final double kDriveForwardMultiplier = 0.8;
-    public static final double kDriveTurnMultiplier = 0.8;
+    public static final double kDriveForwardMultiplier = 1;
+    public static final double kDriveTurnMultiplier = 1;
 
-    public static final double kLinearKS = 0.6;
-    public static final double kLinearKV = 3.2105;
-    public static final double kLinearKA = 0.33214;
-    public static final double kAngularKS = 1.3526;
-    public static final double kAngularKV = 3.4422;
-    public static final double kAngularKA = 0.34065;
+    public static final double kLinearKS = 1.5819;
+    public static final double kLinearKV = 2.9238;
+    public static final double kLinearKA = 1.6274;
+    public static final double kAngularKS = 1.9351;
+    public static final double kAngularKV = 3.4356;
+    public static final double kAngularKA = 1.2996;
 
-    public static final double kP = 1.5;
+    public static final double kP = 1.5551;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kWheelDiameterInches = 6;
     public static final double kWheelCircumferenceMeters = Units.inchesToMeters(6 * Math.PI);
-    public static final double kTrackwidth = 0.56589;
+    public static final double kTrackwidth = 0.57591;
     public static final DifferentialDriveKinematics kDriveKinematics =
         new DifferentialDriveKinematics(kTrackwidth);
     public static final double kCimToWheelGearing = 10.71;
@@ -86,8 +86,10 @@ public final class Constants {
     public static final double kDegreeTolerance = 0.75;
     public static final double kTurnRateTolerance = 1.5;
 
-    public static final double kAutoMaxSpeed = 3;
-    public static final double kAutoMaxAccel = 3;
+    public static final double kAutoMaxSpeed = 1;
+    public static final double kAutoMaxAccel = 2;
+
+    public static final double kAutoTime = 2.5;
   }
 
   public static final class PneumaticClimbConstants {

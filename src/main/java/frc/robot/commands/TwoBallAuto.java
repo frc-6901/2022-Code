@@ -41,7 +41,7 @@ public class TwoBallAuto extends SequentialCommandGroup {
         TrajectoryGenerator.generateTrajectory(
             new Pose2d(Units.feetToMeters(7.75), 0, new Rotation2d(0)),
             new ArrayList<Translation2d>(),
-            new Pose2d(0, 0, new Rotation2d(0)),
+            new Pose2d(1, 0, new Rotation2d(0)),
             reverseConfig);
 
     var fullTrajectory = forwardTrajectory.concatenate(backwardTrajectory);
