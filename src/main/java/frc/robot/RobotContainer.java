@@ -63,7 +63,7 @@ public class RobotContainer {
                 m_drivetrain.drive(0.3, 0.0);
               },
               m_drivetrain)
-          .withTimeout(2.5)
+          .withTimeout(DrivetrainConstants.kAutoTime)
           .andThen(
               () -> {
                 m_drivetrain.drive(0.0, 0.0);

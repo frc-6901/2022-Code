@@ -95,6 +95,11 @@ public class Drivetrain extends SubsystemBase {
 
   /** Creates a new Drivetrain. */
   public Drivetrain(WPI_PigeonIMU pigeon) {
+    m_leftSRX.configFactoryDefault();
+    m_leftSPX.configFactoryDefault();
+    m_rightSRX.configFactoryDefault();
+    m_rightSPX.configFactoryDefault();
+
     m_leftSPX.follow(m_leftSRX);
     m_rightSPX.follow(m_rightSRX);
 
@@ -104,13 +109,8 @@ public class Drivetrain extends SubsystemBase {
     m_leftSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
     m_rightSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 
-    if (RobotBase.isSimulation()) {
-      m_leftSRX.setSensorPhase(false);
-      m_rightSRX.setSensorPhase(false);
-    } else {
-      m_leftSRX.setSensorPhase(true);
-      m_rightSRX.setSensorPhase(true);
-    }
+    m_leftSRX.setSensorPhase(true);
+    m_rightSRX.setSensorPhase(true);
 
     m_leftSRX.setNeutralMode(NeutralMode.Brake);
     m_rightSRX.setNeutralMode(NeutralMode.Brake);
