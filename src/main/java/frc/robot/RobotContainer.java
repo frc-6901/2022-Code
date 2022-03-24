@@ -26,6 +26,7 @@ import frc.robot.commands.TwoBallAuto;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake;
@@ -78,6 +79,7 @@ public class RobotContainer {
           m_drivetrain);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+  private final Hood m_hood = new Hood();
 
   private final XboxController m_navigatorController =
       new XboxController(ControllerConstants.kNavigatorPort);
@@ -108,6 +110,12 @@ public class RobotContainer {
               m_climb.setClimb(0.0);
             },
             m_climb)));
+    m_hood.setDefaultCommand(
+        new RunCommand(
+            () -> {
+              m_hood.set(-m_operatorController.getLeftY());
+            },
+            m_hood));
     // Configure the button bindings
     configureButtonBindings();
 
@@ -216,6 +224,29 @@ public class RobotContainer {
               m_climb.setClimb(-ClimbConstants.kClimbPower);
             },
             m_climb);
+
+    new JoystickButton(m_operatorController, Button.kY.value)
+        .whileHeld(
+            () -> {
+              m_hood.setTargetPosition(15);
+            },
+            m_hood)
+        .whenReleased(
+            () -> {
+              m_hood.set(0);
+            },
+            m_hood);
+    new JoystickButton(m_operatorController, Button.kStart.value)
+        .whileHeld(
+            () -> {
+              m_hood.setTargetPosition(0.0);
+            },
+            m_hood)
+        .whenReleased(
+            () -> {
+              m_hood.set(0);
+            },
+            m_hood);
   }
 
   /**

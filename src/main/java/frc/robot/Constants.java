@@ -16,6 +16,8 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final double kDt = 0.02;
+
   public static final class ShooterConstants {
     public static final int kShooterMotorLeaderPort = 1;
     public static final int kShooterMotorFollowerPort = 2;
@@ -101,5 +103,33 @@ public final class Constants {
     public static final int kRightClimberPort = 41;
 
     public static final double kClimbPower = 0.4;
+  }
+
+  public static final class HoodConstants {
+    public static final int kHoodSRXPort = 51;
+
+    public static final double kMaxAngleDegrees = 30.0;
+    public static final double kMinAngleDegrees = 0.0;
+
+    public static final double kHoodGearing = 2 * (470 / 22);
+    public static final double kHoodCMLengthInches = 2.5;
+    public static final double kHoodMassPounds = 3.5;
+
+    public static final double kS = 0.50434;
+    public static final double kV = 11.671;
+    public static final double kA = 1.4378;
+    public static final double kCos = 0.0;
+    public static final double kP = 75;
+    public static final double kD = 10;
+
+    public static final double kMaxDegreeError = 0.5;
+
+    public static final double kOpenLoopPercentPower = 0.15;
+
+    // 30 degrees of reasonable motion ideally covered in half a second
+    public static final double kMaxVelocity = Units.degreesToRadians(30.0 / 0.5);
+    // Acceleration should get to max velocity in half the time it takes to move all the way across
+    // (mainly a guess number)
+    public static final double kMaxAccel = kMaxVelocity / 0.25;
   }
 }
