@@ -12,13 +12,16 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.LimelightConstants;
+import frc.robot.commands.LimelightAim;
+import frc.robot.commands.LimelightShoot;
 import frc.robot.commands.OneBallAuto;
 import frc.robot.commands.ResetShooter;
 import frc.robot.commands.ShootCommand;
@@ -30,8 +33,10 @@ import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LimelightManager;
 import frc.robot.subsystems.PneumaticClimb;
 import frc.robot.subsystems.Shooter;
+import frc.robot.util.InterpolatingDouble;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -80,6 +85,7 @@ public class RobotContainer {
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
   private final Hood m_hood = new Hood();
+  private final LimelightManager m_limelight = new LimelightManager();
 
   private final XboxController m_navigatorController =
       new XboxController(ControllerConstants.kNavigatorPort);
@@ -137,7 +143,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_operatorController, Button.kX.value)
-        .whileHeld(new ShootCommand(ShooterConstants.kShooterFenderRPM, m_shooter, m_indexer))
+        .whileHeld(
+            new ShootCommand(
+                LimelightConstants.kShooterRPMMap.getInterpolated(
+                        new InterpolatingDouble(m_limelight.getDistance()))
+                    .value,
+                m_shooter,
+                m_indexer))
         .whenReleased(new ResetShooter(m_shooter, m_indexer));
 
     new JoystickButton(m_operatorController, Button.kLeftBumper.value)
@@ -174,6 +186,12 @@ public class RobotContainer {
         .whenReleased(
             () -> {
               m_intake.noBalls();
+            });
+    new JoystickButton(m_navigatorController, Button.kA.value)
+        .whenHeld(new LimelightAim(m_limelight, m_drivetrain))
+        .whenReleased(
+            () -> {
+              m_drivetrain.drive(0, 0);
             });
 
     new JoystickButton(m_operatorController, Button.kB.value)
@@ -226,16 +244,15 @@ public class RobotContainer {
             m_climb);
 
     new JoystickButton(m_operatorController, Button.kY.value)
-        .whileHeld(
-            () -> {
-              m_hood.setTargetPosition(15);
-            },
-            m_hood)
+        .whileHeld(new LimelightShoot(m_shooter, m_indexer, m_hood, m_limelight))
         .whenReleased(
-            () -> {
-              m_hood.set(0);
-            },
-            m_hood);
+            new ParallelCommandGroup(
+                new ResetShooter(m_shooter, m_indexer),
+                new InstantCommand(
+                    () -> {
+                      m_hood.set(0);
+                    },
+                    m_hood)));
     new JoystickButton(m_operatorController, Button.kStart.value)
         .whileHeld(
             () -> {
