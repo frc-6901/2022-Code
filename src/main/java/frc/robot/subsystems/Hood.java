@@ -97,7 +97,7 @@ public class Hood extends SubsystemBase {
   }
 
   public void setTargetPosition(double degrees) {
-    m_targetAngle = Units.degreesToRadians(degrees);
+    m_targetAngle = degrees;
     m_state = HoodState.kClosedLoop;
   }
 
@@ -109,18 +109,18 @@ public class Hood extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Hood Position", getPositionDegrees());
+    SmartDashboard.putNumber("Target Position", m_targetAngle);
     SmartDashboard.putNumber("Hood Position Rad", Units.degreesToRadians(getPositionDegrees()));
 
     if (m_state == HoodState.kClosedLoop) {
       SmartDashboard.putString("Hood State", "CLOSED");
       m_openLoopPower = 0.0;
-      double output =
-          m_controller.calculate(Units.degreesToRadians(getPositionDegrees()), m_targetAngle);
+      double output = m_controller.calculate(getPositionDegrees(), m_targetAngle);
       SmartDashboard.putNumber("Output", output);
       m_hoodMotor.setVoltage(output);
     } else {
       SmartDashboard.putString("Hood State", "OPEN");
-      if (Math.abs(m_openLoopPower) > 0.1) {
+      if (Math.abs(m_openLoopPower) > 0.25) {
         m_hoodMotor.set((m_openLoopPower > 0 ? 1 : -1) * HoodConstants.kOpenLoopPercentPower);
       } else {
         m_hoodMotor.set(0);

@@ -23,11 +23,11 @@ public class Climb extends SubsystemBase {
 
     m_leftClimbSide.setIdleMode(IdleMode.kBrake);
     m_rightClimbSide.setIdleMode(IdleMode.kBrake);
-    m_rightClimbSide.follow(m_leftClimbSide, true);
   }
 
-  public void setClimb(double power) {
-    m_leftClimbSide.set(power);
+  public void setClimb(double leftPower, double rightPower) {
+    m_leftClimbSide.setVoltage(leftPower);
+    m_rightClimbSide.setVoltage(-rightPower);
   }
 
   @Override

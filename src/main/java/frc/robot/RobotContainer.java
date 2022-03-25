@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.LimelightConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.LimelightAim;
 import frc.robot.commands.LimelightShoot;
 import frc.robot.commands.OneBallAuto;
@@ -36,7 +36,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimelightManager;
 import frc.robot.subsystems.PneumaticClimb;
 import frc.robot.subsystems.Shooter;
-import frc.robot.util.InterpolatingDouble;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -113,7 +112,7 @@ public class RobotContainer {
     m_climb.setDefaultCommand(
         (new RunCommand(
             () -> {
-              m_climb.setClimb(0.0);
+              m_climb.setClimb(0.0, 0.0);
             },
             m_climb)));
     m_hood.setDefaultCommand(
@@ -143,13 +142,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_operatorController, Button.kX.value)
-        .whileHeld(
-            new ShootCommand(
-                LimelightConstants.kShooterRPMMap.getInterpolated(
-                        new InterpolatingDouble(m_limelight.getDistance()))
-                    .value,
-                m_shooter,
-                m_indexer))
+        .whileHeld(new ShootCommand(ShooterConstants.kShooterFenderRPM, m_shooter, m_indexer))
         .whenReleased(new ResetShooter(m_shooter, m_indexer));
 
     new JoystickButton(m_operatorController, Button.kLeftBumper.value)
@@ -233,13 +226,13 @@ public class RobotContainer {
     new POVButton(m_operatorController, 0)
         .whileHeld(
             () -> {
-              m_climb.setClimb(ClimbConstants.kClimbPower);
+              m_climb.setClimb(ClimbConstants.kClimbLeftPower, ClimbConstants.kClimbRightPower);
             },
             m_climb);
     new POVButton(m_operatorController, 180)
         .whileHeld(
             () -> {
-              m_climb.setClimb(-ClimbConstants.kClimbPower);
+              m_climb.setClimb(-ClimbConstants.kClimbLeftPower, -ClimbConstants.kClimbRightPower);
             },
             m_climb);
 
