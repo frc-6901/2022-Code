@@ -24,7 +24,7 @@ public final class Constants {
     public static final int kShooterMotorLeaderPort = 1;
     public static final int kShooterMotorFollowerPort = 2;
     public static final double kShooterFenderRPM = 1500;
-    public static final double kShooterRPMThreshold = 75;
+    public static final double kShooterRPMThreshold = 50;
     public static final double kPower = 0.6;
     public static final double kS = 0.39592;
     public static final double kV = 0.15034;
@@ -104,7 +104,8 @@ public final class Constants {
     public static final int kLeftClimberPort = 40;
     public static final int kRightClimberPort = 41;
 
-    public static final double kClimbPower = 0.4;
+    public static final double kClimbLeftPower = 4.0;
+    public static final double kClimbRightPower = 4.0;
   }
 
   public static final class HoodConstants {
@@ -121,8 +122,8 @@ public final class Constants {
     public static final double kV = 11.671;
     public static final double kA = 1.4378;
     public static final double kCos = 0.0;
-    public static final double kP = 75;
-    public static final double kD = 10;
+    public static final double kP = .95;
+    public static final double kD = 0.0;
 
     public static final double kMaxDegreeError = 0.5;
 
@@ -149,8 +150,8 @@ public final class Constants {
     static {
       kShooterRPMMap.put(new InterpolatingDouble(0.97), new InterpolatingDouble(1450.0));
       kShooterRPMMap.put(new InterpolatingDouble(1.72), new InterpolatingDouble(1600.0));
-      kShooterRPMMap.put(new InterpolatingDouble(2.33), new InterpolatingDouble(1700.0));
-      kShooterRPMMap.put(new InterpolatingDouble(3.05), new InterpolatingDouble(1875.0));
+      kShooterRPMMap.put(new InterpolatingDouble(2.04), new InterpolatingDouble(1700.0));
+      kShooterRPMMap.put(new InterpolatingDouble(2.60), new InterpolatingDouble(1800.0));
     }
 
     public static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> kHoodMap =
@@ -159,8 +160,8 @@ public final class Constants {
     static {
       kHoodMap.put(new InterpolatingDouble(0.97), new InterpolatingDouble(8.0));
       kHoodMap.put(new InterpolatingDouble(1.72), new InterpolatingDouble(20.0));
-      kHoodMap.put(new InterpolatingDouble(2.33), new InterpolatingDouble(23.5));
-      kHoodMap.put(new InterpolatingDouble(3.05), new InterpolatingDouble(28.5));
+      kHoodMap.put(new InterpolatingDouble(2.04), new InterpolatingDouble(19.7));
+      kHoodMap.put(new InterpolatingDouble(2.66), new InterpolatingDouble(24.6));
     }
   }
 }
