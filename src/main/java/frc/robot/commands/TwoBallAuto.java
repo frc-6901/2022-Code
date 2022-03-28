@@ -24,19 +24,24 @@ public class TwoBallAuto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new ShootCommand(ShooterConstants.kShooterFenderRPM, 4.0, shooter, indexer),
+        new ShootCommand(ShooterConstants.kShooterFenderRPM, 2.0, shooter, indexer),
         new ParallelCommandGroup(
-            new RunCommand(
-                () -> {
-                  intake.intakeBalls();
-                },
-                intake),
-            new RunCommand(
+                new RunCommand(
+                    () -> {
+                      intake.intakeBalls();
+                    },
+                    intake),
+                new RunCommand(
                     () -> {
                       drive.drive(0.5, 0.0);
                     },
-                    drive)
-                .withTimeout(DrivetrainConstants.kAutoTime)),
+                    drive))
+            .withTimeout(DrivetrainConstants.kAutoTime),
+        new InstantCommand(
+            () -> {
+              drive.drive(0.0, 0.0);
+            },
+            drive),
         new InstantCommand(
             () -> {
               intake.retractIntake();
@@ -48,6 +53,11 @@ public class TwoBallAuto extends SequentialCommandGroup {
                 },
                 drive)
             .withTimeout(DrivetrainConstants.kAutoTime),
+        new InstantCommand(
+            () -> {
+              drive.drive(0.0, 0.0);
+            },
+            drive),
         new ShootCommand(ShooterConstants.kShooterFenderRPM, 4.0, shooter, indexer));
   }
 }
