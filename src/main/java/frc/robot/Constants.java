@@ -104,8 +104,8 @@ public final class Constants {
     public static final int kLeftClimberPort = 40;
     public static final int kRightClimberPort = 41;
 
-    public static final double kClimbLeftPower = 4.0;
-    public static final double kClimbRightPower = 4.0;
+    public static final double kClimbLeftPower = 7.0;
+    public static final double kClimbRightPower = 7.0;
   }
 
   public static final class HoodConstants {

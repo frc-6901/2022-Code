@@ -34,7 +34,6 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimelightManager;
-import frc.robot.subsystems.PneumaticClimb;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -49,7 +48,7 @@ public class RobotContainer {
       new ExampleSubsystem(); // you said not to mess with this
   private final Shooter m_shooter = new Shooter();
   private final Intake m_intake = new Intake();
-  private final PneumaticClimb m_pneumaticClimb = new PneumaticClimb();
+  // private final PneumaticClimb m_pneumaticClimb = new PneumaticClimb();
 
   private final Indexer m_indexer = new Indexer();
 
@@ -210,19 +209,19 @@ public class RobotContainer {
               m_indexer.setState(IndexerState.kPassive);
             },
             m_indexer);
-    new POVButton(m_operatorController, 90)
-        .whenPressed(
-            () -> {
-              m_pneumaticClimb.extendClimb();
-            },
-            m_pneumaticClimb);
+    // new POVButton(m_operatorController, 90)
+    //     .whenPressed(
+    //         () -> {
+    //           m_pneumaticClimb.extendClimb();
+    //         },
+    //         m_pneumaticClimb);
 
-    new POVButton(m_operatorController, 270)
-        .whenPressed(
-            () -> {
-              m_pneumaticClimb.retractClimb();
-            },
-            m_pneumaticClimb);
+    // new POVButton(m_operatorController, 270)
+    //     .whenPressed(
+    //         () -> {
+    //           m_pneumaticClimb.retractClimb();
+    //         },
+    //         m_pneumaticClimb);
     new POVButton(m_operatorController, 0)
         .whileHeld(
             () -> {

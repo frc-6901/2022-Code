@@ -4,11 +4,14 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.LimelightConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Indexer.IndexerState;
 import frc.robot.subsystems.LimelightManager;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.InterpolatingDouble;
@@ -19,23 +22,30 @@ import frc.robot.util.InterpolatingDouble;
 public class LimelightShoot extends SequentialCommandGroup {
   /** Creates a new LimelightShoot. */
   public LimelightShoot(Shooter shooter, Indexer indexer, Hood hood, LimelightManager limelight) {
+    double RPM =
+        LimelightConstants.kShooterRPMMap.getInterpolated(
+                new InterpolatingDouble(limelight.getDistance()))
+            .value;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+        new ParallelCommandGroup(
+            new RunCommand(
+                    () -> {
+                      hood.setTargetPosition(
+                          LimelightConstants.kHoodMap.getInterpolated(
+                                  new InterpolatingDouble(limelight.getDistance()))
+                              .value);
+                    },
+                    hood)
+                .until(hood::atTargetPosition),
+            new SetFlywheelSpeed(RPM, shooter, indexer)
+                .withTimeout(ShooterConstants.kRampUpTimeoutSeconds)),
         new RunCommand(
-                () -> {
-                  hood.setTargetPosition(
-                      LimelightConstants.kHoodMap.getInterpolated(
-                              new InterpolatingDouble(limelight.getDistance()))
-                          .value);
-                },
-                hood)
-            .until(hood::atTargetPosition),
-        new ShootCommand(
-            LimelightConstants.kShooterRPMMap.getInterpolated(
-                    new InterpolatingDouble(limelight.getDistance()))
-                .value,
-            shooter,
+            () -> {
+              shooter.setRPM(RPM);
+              indexer.setState(IndexerState.kFeeding);
+            },
             indexer));
   }
 }
